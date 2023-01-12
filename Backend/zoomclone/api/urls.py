@@ -7,5 +7,5 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('register',RegisterApiView.as_view()),
     path('login', LoginView.as_view(), name='login'),
-    # path('create', createMeeting()),
+   
 ]

@@ -17,12 +17,13 @@ class JoinMeeting extends Component {
         var title = "Join Meeting";
 
         const join = this.props.join
-        var button = <Link onClick={this.toggle}>Join</Link>;
+        var button = <Link to="/#" onClick={this.toggle}>Join</Link>;
         if (join) {
             title = "Joinning a new meet";
       
             button = (
               <Link
+                to="/#"
                 color="primary"
                 onClick={this.toggle}
               >

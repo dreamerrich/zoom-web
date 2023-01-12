@@ -3,14 +3,14 @@ import { Button, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import JoinMeetModal from '../pages/JoinMeetModal';
 // import Zooming from './Zooming';
 
-class SignInModal extends Component {
+class ZoomingModal extends Component {
     state = {
         modal: false
       };
     
       toggle = () => {
-        this.setState(previous => ({
-          modal: !previous.modal
+        this.setState(zoom => ({
+          modal: !zoom.modal
         }));
       };
 
@@ -45,4 +45,4 @@ class SignInModal extends Component {
     }
 }
 
-export default SignInModal;
+export default ZoomingModal;
