@@ -115,19 +115,19 @@ const Header = ({
                       navPosition && `header-nav-${navPosition}`
                     )}>
                     <li>
-                      <Link to="#0" onClick={closeMenu}>Products</Link>
+                      <Link to="#products" onClick={closeMenu}>Products</Link>
                     </li>
                     <li>
-                      <Link to="#0" onClick={closeMenu}>Solutions</Link>
+                      <Link to="#solutions" onClick={closeMenu}>Solutions</Link>
                     </li>
                     <li>
-                      <Link to="#0" onClick={closeMenu}>Resources</Link>
+                      <Link to="#resource" onClick={closeMenu}>Resources</Link>
                     </li>
                     <li>
-                      <Link to="plans" onClick={closeMenu}>Plans & Pricing</Link>
+                      <Link to="plans" onClick={openMenu}>Plans & Pricing</Link>
                     </li>
                     <li>
-                      <Link to="#0" onClick={closeMenu}>Host</Link>
+                      <Link to="#host" onClick={closeMenu}>Host</Link>
                     </li>
                     <li>
                       <JoinMeetModal join={true} />
@@ -138,7 +138,7 @@ const Header = ({
                       className="list-reset header-nav-right"
                     >
                       <li>
-                        <Link to="#0" className="button button-light button-wide-mobile button-sm" onClick={closeMenu}>Contact Sales</Link>
+                        <Link to="#contact" className="button button-light button-wide-mobile button-sm" onClick={closeMenu}>Contact Sales</Link>
                         </li>
                         <li>
                           <HsignInModal join={true}  /> 

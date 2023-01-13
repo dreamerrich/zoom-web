@@ -6,6 +6,7 @@ import Button from '../elements/Button';
 import Image from '../elements/Image';
 import Modal from '../elements/Modal';
 import SignInModal from '../pages/SignInModal';
+// import Plans from './Plans&pricing';
 
 const propTypes = {
   ...SectionProps.types

@@ -12,7 +12,7 @@ const defaultProps = {
   ...SectionTilesProps.defaults
 }
 
-const Testimonial = ({
+const Plans = ({
   className,
   topOuterDivider,
   bottomOuterDivider,
@@ -117,8 +117,7 @@ const Testimonial = ({
     </section>
   );
 }
+Plans.propTypes = propTypes;
+Plans.defaultProps = defaultProps;
 
-Testimonial.propTypes = propTypes;
-Testimonial.defaultProps = defaultProps;
-
-export default Testimonial;
+export default Plans;
