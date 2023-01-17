@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Modal, ModalBody, ModalHeader } from 'reactstrap';
-import SignIn from './SignIn';
+import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import Signup from './Signup';
+import { Link } from 'react-router-dom';
 
 class SignInModal extends Component {
     state = {
@@ -13,23 +14,23 @@ class SignInModal extends Component {
         }));
       };
     render() {
-        var title = "Sign In";
+        var title = "Sign Up";
 
         const signin = this.props.join
-        var button = <Button color="light" onClick={this.toggle}>Sign In </Button>;
+        var button = <Link color="light" onClick={this.toggle}>Sign Up </Link>;
         if (signin) {
-            title = "Sign In";
+            title = "Sign up";
       
             button = (
-              <Button
+                <Link
                 color="light"
-                className="float-center"
+                className="button button-light button-wide-mobile button-sm"
                 onClick={this.toggle}
                 
                 href=""
               >
-                Sign In
-              </Button>
+                Sign Up
+              </Link>
             );
           }
         return (
@@ -38,7 +39,7 @@ class SignInModal extends Component {
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
                     <ModalBody>
-                    <SignIn
+                    <Signup
                         toggle={this.toggle}
                     />
                     

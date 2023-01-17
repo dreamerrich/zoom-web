@@ -28,8 +28,7 @@ export default function JoinMeeting() {
     }
 
     const [ checked, setChecked] = useState(false);
-    const handleChange = () => {
-
+    const handleChange = (e) => {
         setChecked(!checked);
 
     };
@@ -85,7 +84,7 @@ export default function JoinMeeting() {
                     </div>
                 </FormGroup>
                 <Button onClick={(e) => videoCall(1)} color="primary" disabled={!enableSubmit}>Join</Button> &nbsp; &nbsp; 
-                <Button onClick={{}} color="light">Cancel</Button>
+                <Button onClick={(e) => videoCall(0)} color="light">Cancel</Button>
                 </Form>
             </Fragment>
 

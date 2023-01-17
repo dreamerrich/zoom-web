@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { SectionProps } from "../../utils/SectionProps";
 import { Link } from 'react-router-dom';
+import SignInModal from "../pages/SignupModal";
 
 const propTypes = {
   ...SectionProps.types,
@@ -55,11 +56,7 @@ const Cta = ({
                   Contact Sales
                 </Link>
                 &nbsp;&nbsp;&nbsp;
-                <Link
-                  to="#0"
-                  className="button button-primary button-wide-mobile button-sm">
-                  Sign up
-                </Link>
+                <SignInModal/>
           </div>
         </div>
       </div>

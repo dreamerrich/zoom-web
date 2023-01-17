@@ -6,8 +6,10 @@
     "@zoomus/websdk": "^2.9.5",
     "bootstrap": "^5.2.3",
     "classnames": "^2.2.6",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.15",
     "react": "^16.13.1",
+    "react-axios": "^2.0.6",
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
     "react-router-dom": "^5.1.2",
@@ -42,5 +44,6 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.0.0"
-  }
+  },
+  "proxy": "https://api.zoom.us/v2/"
 }

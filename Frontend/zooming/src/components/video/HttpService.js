@@ -1,7 +1,10 @@
 const p = (response) => response.json();
 
 export class Http {
-  constructor(baseUri, headers = { "Content-Type": "application/json" }) {
+  constructor(baseUri = "https://api.zoom.us/v2", 
+  headers = { "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*" }) 
+  {
     this.baseUri = baseUri;
     this.headers = headers;
   }

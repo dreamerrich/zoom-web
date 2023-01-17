@@ -1,6 +1,6 @@
 import { Http } from "./httpService";
 
-const apiUrl = "https://f6e1418abfff.ngrok.io";
+const apiUrl = "https://api.zoom.us/v2/";
 const http = new Http(apiUrl);
 
 export const getSignature = (params) => {
