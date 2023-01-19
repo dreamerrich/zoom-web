@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -6,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Logo from './partials/Logo';
 import JoinMeetModal from '../pages/JoinMeetModal';
 import HsignInModal from '../pages/HsignInModal';
+// import Logout from '../../login/Logout';
 
 const propTypes = {
   navPosition: PropTypes.string,
@@ -77,6 +77,7 @@ const Header = ({
     className
   );
 
+
   return (
     <header
       {...props}
@@ -139,10 +140,12 @@ const Header = ({
                     >
                       <li>
                         <Link to="#contact" className="button button-light button-wide-mobile button-sm" onClick={closeMenu}>Contact Sales</Link>
-                        </li>
-                        <li>
-                          <HsignInModal join={true}  /> 
-                        </li>
+                      </li>
+
+                      <li>
+                        <HsignInModal join={true}/>
+                      </li> 
+                       
                     </ul>}
                 </div>
               </nav>

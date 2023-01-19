@@ -1,118 +1,80 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { FormGroup, Input, Form } from "reactstrap";
-import { createUser } from "../video/ZoomServices";
+import AuthContext from '../../login/AuthContext';
 
-export default function CreateUser() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [submitted, setsubmitted] = useState(false);
-  const [error, setError] = useState(false);
+  function Register() {
+    const [username, setUsername] = useState("");
+    console.log("error>>>>>>>", username)
+    const [email, setEmail] = useState("");
+    console.log("error>>>>>>>",email)
+    const [first_name, setFirst_name] = useState("");
+    console.log("error>>>>>>>", first_name)
+    const [last_name, setLast_name] = useState("");
+    console.log("error>>>>>>>",last_name)
+    const [password, setPassword] = useState("");
+    console.log("error>>>>>>>",password)
+    const [password2, setPassword2] = useState("");
+    console.log("error>>>>>>>",password2)
+    const { registerUser } = useContext(AuthContext);
 
-  const handleName = (e) => {
-    setFirstName(e.target.value);
-    setsubmitted(false);
-  }
-
-  const handlelastName = (e) => {
-    setLastName(e.target.value);
-    setsubmitted(false);
-  }
-
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-    setsubmitted(false);
-  }
-
-  const handlePassword = (e) => {
-    setPassword(e.target.value);
-    setsubmitted(false);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (firstName === '' || lastName === ''|| email === '' || password === '') {
-      setError(true);
-    } else {
-      setsubmitted(true);
-      setError(false);
-    }
-  };
-
-  const successMessage = () => {
-    return (
-      <div
-        className="success"
-        style={{
-          display: submitted ? '' : 'none',
-        }}>
-        <h4>User {firstName} successfully registered!!</h4>
-      </div>
-    );
-  };
-
-  const errorMessage = () => {
-    return (
-      <div
-        className="error"
-        style={{
-          display: error ? '' : 'none',
-        }}>
-        <h4>Please enter all the fields</h4>
-      </div>
-    );
-  };
-
-  const onCreateUser = async (e) => {
-    e.preventDefault();
-    const payload = { firstName, lastName, email };
-    console.log("", payload)
-    const resp = await createUser(payload);
-    console.log("", resp)
+    const handleSubmit = async e => {
+      e.preventDefault();
+      registerUser(username, email, first_name, last_name, password, password2);
   };
     
   return (
     <Fragment>
-            <Form onSubmit={(e) => onCreateUser(e)} className='text-center'>
-            <div className="messages">
-                {errorMessage()}
-                {successMessage()}
-            </div>
+            <Form onSubmit={handleSubmit} className='text-center'>
                 <FormGroup>
                     <Input
                         type="text"
-                        name="firstname"
-                        placeholder='firstName'
-                        value={firstName}
-                        onChange={handleName}
+                        name="username"
+                        id="username"
+                        placeholder='userName'
+                        onChange={e => setUsername(e.target.value)}
                         required
                     />&nbsp; 
                     <Input
-                        type="lastname"
-                        name="lastname"
-                        placeholder='Lastname'
-                        value={lastName}
-                        onChange={handlelastName}
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder='email'
+                        onChange={e => setEmail(e.target.value)}
                         required
                     />&nbsp; <br />
                     <Input
-                        type="email"
-                        name="email"
-                        placeholder='email'
-                        value={email}
-                        onChange={handleEmail}
+                        type="text"
+                        name="first_name"
+                        id="first_name"
+                        placeholder='Firstname'
+                        onChange={e => setFirst_name(e.target.value)}
+                        required
+                    />&nbsp; 
+                    <Input
+                        type="text"
+                        name="last_name"
+                        id="last_name"
+                        placeholder='Lastname'
+                        onChange={e => setLast_name(e.target.value)}
                         required
                     />&nbsp; <br />
                     <Input
                         type="password"
                         name="password"
+                        id="password"
                         placeholder='password'
-                        value={password}
-                        onChange={handlePassword}
+                        onChange={e => setPassword(e.target.value)}
                         required
                     />&nbsp; <br />
-                    <button type="submit" className="btn" onClick={handleSubmit}>
+                    <Input
+                        type="password"
+                        name="password2"
+                        id="password2"
+                        placeholder='re-enter password'
+                        onChange={e => setPassword2(e.target.value)}
+                        required
+                    />&nbsp; {password2 !== password ? "Passwords do not match" : ""}<br />
+                    <button type="submit" className="btn" >
                     Create
                     </button>
                     <br />
@@ -121,3 +83,5 @@ export default function CreateUser() {
         </Fragment>
   );
 }
+
+export default Register;

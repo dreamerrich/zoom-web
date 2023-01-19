@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Modal, ModalBody, ModalHeader } from 'reactstrap';
-import SignIn from './SignIn';
+import Signup from './Signup';
 
 class SignInModal extends Component {
     state = {
@@ -13,22 +13,20 @@ class SignInModal extends Component {
         }));
       };
     render() {
-        var title = "Sign In";
+        var title = "Sign Up";
 
         const signin = this.props.join
-        var button = <Button color="light" onClick={this.toggle}>Sign In </Button>;
+        var button = <Button color="light" onClick={this.toggle}>Sign Up </Button>;
         if (signin) {
-            title = "Sign In";
+            title = "Sign Up";
       
             button = (
               <Button
                 color="light"
                 className="float-center"
                 onClick={this.toggle}
-                
-                href=""
               >
-                Sign In
+                Sign Up
               </Button>
             );
           }
@@ -38,7 +36,7 @@ class SignInModal extends Component {
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
                     <ModalBody>
-                    <SignIn
+                    <Signup
                         toggle={this.toggle}
                     />
                     

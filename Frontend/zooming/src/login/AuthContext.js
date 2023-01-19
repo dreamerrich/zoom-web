@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
 
+
 const AuthContext = createContext();
 
 export default AuthContext;
@@ -38,14 +39,15 @@ export const AuthProvider = ({ children }) => {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
+      console.log(">>>>>")
       history.push("/");
     } else {
       alert("Something went wrong!");
     }
   };
   
-  const registerUser = async (username, email, password, password2) => {
-    const response = await fetch("http://127.0.0.1:8000/api/register/", {
+  const registerUser = async (username, email, first_name, last_name, password, password2) => {
+    const response = await fetch("http://127.0.0.1:8000/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -53,6 +55,8 @@ export const AuthProvider = ({ children }) => {
       body: JSON.stringify({
         username,
         email,
+        first_name,
+        last_name,
         password,
         password2
       })
@@ -60,10 +64,11 @@ export const AuthProvider = ({ children }) => {
     if (response.status === 201) {
       history.push("/login");
     } else {
+      console.log("register",response)
       alert("Something went wrong!");
     }
   };
-
+ 
   const logoutUser = () => {
     setAuthTokens(null);
     setUser(null);
@@ -87,10 +92,9 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
   }, [authTokens, loading]);
-
   return (
     <AuthContext.Provider value={contextData}>
-      {loading ? null : children}
+      {children} 
     </AuthContext.Provider>
   );
 };

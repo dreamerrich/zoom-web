@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@zoomus/websdk": "^2.9.5",
     "bootstrap": "^5.2.3",
     "classnames": "^2.2.6",
     "jwt-decode": "^3.1.2",
@@ -14,6 +13,7 @@
     "react-ga": "^2.7.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "5.0.1",
+    "react-simple-oauth2-login": "^0.5.4",
     "reactstrap": "^9.1.5",
     "sass": "^1.49.7"
   },

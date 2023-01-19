@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import SignIn from './SignIn';
 import { Link } from 'react-router-dom';
+import { AuthProvider } from '../../login/AuthContext';
+
 
 class SignInModal extends Component {
     state = {
@@ -19,7 +21,7 @@ class SignInModal extends Component {
         const signin = this.props.join
         var button = <Link className="button button-light button-wide-mobile button-sm" onClick={this.toggle}>Sign In</Link>;
         if (signin) {
-            title = "Sign up";
+            title = "Sign In";
       
             button = (
                 <Link className="button button-light button-wide-mobile button-sm" onClick={this.toggle}>Sign In</Link>
@@ -31,10 +33,11 @@ class SignInModal extends Component {
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
                     <ModalBody>
+                    <AuthProvider>
                     <SignIn
                         toggle={this.toggle}
                     />
-                    
+                    </AuthProvider>
                     </ModalBody>
 
                 </Modal>
