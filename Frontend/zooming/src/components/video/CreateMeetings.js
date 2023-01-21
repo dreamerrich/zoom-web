@@ -22,7 +22,6 @@ function CreateMeeting() {
         <p>Schedule</p>
         <Form style={{textAlign:"left"}} onSubmit={handleSubmit}>
             <FormGroup>
-                <h2>Topic</h2>
                 <Input
                         type="text"
                         name="agenda"
