@@ -59,8 +59,8 @@ class meetingDetail(models.Model):
     passcode = models.CharField(max_length=255)
 
 class createMeeting(models.Model):
+    agenda = models.CharField(max_length=255)
     topic = models.CharField(max_length=255)
     date = models.DateField()
     duration = models.CharField(max_length=10)
-    meeting_id = models.CharField(max_length=20)
-    passcode = models.CharField(max_length=255)
+    

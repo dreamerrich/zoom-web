@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import Logo from './partials/Logo';
-import JoinMeetModal from '../pages/JoinMeetModal';
+// import JoinMeetModal from '../pages/JoinMeetModal';
 import HsignInModal from '../pages/HsignInModal';
 // import Logout from '../../login/Logout';
+import CreateMeetingModal from '../video/CreatemeetingModal';
 
 const propTypes = {
   navPosition: PropTypes.string,
@@ -23,6 +24,7 @@ const defaultProps = {
   bottomDivider: false
 }
 
+
 const Header = ({
   className,
   navPosition,
@@ -32,12 +34,12 @@ const Header = ({
   bottomDivider,
   ...props
 }) => {
-
+  
   const [isActive, setIsactive] = useState(false);
-
+  
   const nav = useRef(null);
   const hamburger = useRef(null);
-
+  
   useEffect(() => {
     isActive && openMenu();
     document.addEventListener('keydown', keyPress);
@@ -48,35 +50,34 @@ const Header = ({
       closeMenu();
     };
   });  
-
+  
   const openMenu = () => {
     document.body.classList.add('off-nav-is-active');
     nav.current.style.maxHeight = nav.current.scrollHeight + 'px';
     setIsactive(true);
   }
-
+  
   const closeMenu = () => {
     document.body.classList.remove('off-nav-is-active');
     nav.current && (nav.current.style.maxHeight = null);
     setIsactive(false);
   }
-
+  
   const keyPress = (e) => {
     isActive && e.keyCode === 27 && closeMenu();
   }
-
+  
   const clickOutside = (e) => {
     if (!nav.current) return
     if (!isActive || nav.current.contains(e.target) || e.target === hamburger.current) return;
     closeMenu();
   }  
-
+  
   const classes = classNames(
     'site-header',
     bottomOuterDivider && 'has-bottom-divider',
     className
-  );
-
+    );
 
   return (
     <header
@@ -116,7 +117,7 @@ const Header = ({
                       navPosition && `header-nav-${navPosition}`
                     )}>
                     <li>
-                      <Link to="#products" onClick={closeMenu}>Products</Link>
+                      <Link to="/Product" onClick={closeMenu}>Products</Link>
                     </li>
                     <li>
                       <Link to="#solutions" onClick={closeMenu}>Solutions</Link>
@@ -125,23 +126,22 @@ const Header = ({
                       <Link to="#resource" onClick={closeMenu}>Resources</Link>
                     </li>
                     <li>
-                      <Link to="plans" onClick={openMenu}>Plans & Pricing</Link>
+                      <Link to="/Plans" onClick={openMenu}>Plans & Pricing</Link>
                     </li>
                     <li>
-                      <Link to="#host" onClick={closeMenu}>Host</Link>
+                      <CreateMeetingModal join={true}/>
                     </li>
                     <li>
-                      <JoinMeetModal join={true} />
+                      <a href={`https://zoom.us/oauth/authorize?response_type=code&client_id=56cqnjWXS4CoW7KG76zvgg&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fzoom%2Faouthredirect}`} onClick={closeMenu}>Host</a>
+                    </li>
+                    <li>
+                      
                     </li>
                   </ul>
                   {!hideSignin &&
                     <ul
                       className="list-reset header-nav-right"
                     >
-                      <li>
-                        <Link to="#contact" className="button button-light button-wide-mobile button-sm" onClick={closeMenu}>Contact Sales</Link>
-                      </li>
-
                       <li>
                         <HsignInModal join={true}/>
                       </li> 

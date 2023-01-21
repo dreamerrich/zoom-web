@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Modal, ModalBody, ModalHeader } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import Signup from './Signup';
 
-class SignInModal extends Component {
+class SignUpModal extends Component {
     state = {
         modal: false
       };
@@ -12,22 +13,22 @@ class SignInModal extends Component {
           modal: !previous.modal
         }));
       };
+
     render() {
         var title = "Sign Up";
 
-        const signin = this.props.join
-        var button = <Button color="light" onClick={this.toggle}>Sign Up </Button>;
-        if (signin) {
+        const signup = this.props.join
+        var button = <Link onClick={this.toggle}>Sign Up </Link>;
+        if (signup) {
             title = "Sign Up";
       
             button = (
-              <Button
-                color="light"
+              <Link
                 className="float-center"
                 onClick={this.toggle}
               >
                 Sign Up
-              </Button>
+              </Link>
             );
           }
         return (
@@ -48,4 +49,4 @@ class SignInModal extends Component {
     }
 }
 
-export default SignInModal;
+export default SignUpModal;

@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
-      console.log(">>>>>")
+      alert("login Successfully");
       history.push("/");
     } else {
       alert("Something went wrong!");
@@ -62,9 +62,10 @@ export const AuthProvider = ({ children }) => {
       })
     });
     if (response.status === 201) {
-      history.push("/login");
+      history.push("");
+      alert("Successfully registered")
     } else {
-      console.log("register",response)
+     
       alert("Something went wrong!");
     }
   };
@@ -76,6 +77,28 @@ export const AuthProvider = ({ children }) => {
     history.push("/");
   };
 
+  const CreateMeeting = async (agenda, topic, date, duration) => {
+    const response = await fetch("http://127.0.0.1:8000/createMeeting", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        agenda,
+        topic,
+        date,
+        duration,
+      })
+    });
+    if (response.status === 201) {
+      history.push("");
+      alert("Successfully registered")
+    } else {
+     
+      alert("Something went wrong!");
+    }
+  }
+
   const contextData = {
     user,
     setUser,
@@ -83,7 +106,8 @@ export const AuthProvider = ({ children }) => {
     setAuthTokens,
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    CreateMeeting
   };
 
   useEffect(() => {

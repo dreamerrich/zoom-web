@@ -5,7 +5,7 @@ import AuthContext from '../../login/AuthContext';
 
 const SignIn = () => {
   const { loginUser } = useContext(AuthContext);
-    console.log("error",loginUser)
+   
   const handleSubmit = e => {
     e.preventDefault();
     const username = e.target.username.value;

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { SectionProps } from "../../utils/SectionProps";
 import { Link } from 'react-router-dom';
-import SignInModal from "../pages/SignupModal";
+import SignInModal from "../pages/SignUpModal";
 
 const propTypes = {
   ...SectionProps.types,

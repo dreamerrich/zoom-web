@@ -4,17 +4,17 @@ import AuthContext from '../../login/AuthContext';
 
   function Register() {
     const [username, setUsername] = useState("");
-    console.log("error>>>>>>>", username)
+    
     const [email, setEmail] = useState("");
-    console.log("error>>>>>>>",email)
+   
     const [first_name, setFirst_name] = useState("");
-    console.log("error>>>>>>>", first_name)
+   
     const [last_name, setLast_name] = useState("");
-    console.log("error>>>>>>>",last_name)
+    
     const [password, setPassword] = useState("");
-    console.log("error>>>>>>>",password)
+    
     const [password2, setPassword2] = useState("");
-    console.log("error>>>>>>>",password2)
+    
     const { registerUser } = useContext(AuthContext);
 
     const handleSubmit = async e => {

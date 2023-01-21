@@ -58,12 +58,6 @@ class meetingData(serializers.ModelSerializer):
     model = meetingDetail
     fields = '__all__'
 
-    def validte(self, attr):
-      if attr['passcode'] != ['passcode']:
-        raise serializers.ValidationError(
-        {"password": "Password fields didn't match."})
-      return attr
-
 class createMeeting(serializers.ModelSerializer):
   class Meta:
     model = createMeeting

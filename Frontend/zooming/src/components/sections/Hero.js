@@ -5,7 +5,7 @@ import ButtonGroup from '../elements/ButtonGroup';
 import Button from '../elements/Button';
 import Image from '../elements/Image';
 import Modal from '../elements/Modal';
-import SignInModal from '../pages/SignInModal';
+import SignInModal from '../pages/SignUpModal';
 // import Plans from './Plans&pricing';
 
 const propTypes = {
@@ -76,7 +76,7 @@ const Hero = ({
                   <Button tag="a" color="primary" wideMobile href="">
                     Plans & Pricing
                     </Button>
-                      <SignInModal join={true}  /> 
+                      <Button color="dark"><SignInModal join={true}  /></Button>
                 </ButtonGroup>
               </div>
             </div>

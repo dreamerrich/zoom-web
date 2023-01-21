@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import { SectionTilesProps } from '../../utils/SectionProps';
 import SectionHeader from './partials/SectionHeader';
 import Button from '../elements/Button';
+import Header from '../layout/Header';
+import Footer from '../layout/Footer';
 
 const propTypes = {
   ...SectionTilesProps.types
@@ -54,6 +56,7 @@ const Plans = ({
       {...props}
       className={outerClasses}
     >
+    <Header />
       <div className="container">
         <div className={innerClasses}>
           <SectionHeader data={sectionHeader} className="center-content" />
@@ -112,8 +115,8 @@ const Plans = ({
 
             </div>
           </div>
-
           </div>
+      <Footer/>
     </section>
   );
 }

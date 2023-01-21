@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, ModalBody, ModalHeader } from 'reactstrap';
-import Signup from './Signup';
 import { Link } from 'react-router-dom';
+import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import CreateMeeting from './CreateMeetings';
+import { AuthProvider } from '../../login/AuthContext';
 
-class SignInModal extends Component {
+class CreateMeetingModal extends Component {
     state = {
         modal: false
       };
@@ -13,23 +14,21 @@ class SignInModal extends Component {
           modal: !previous.modal
         }));
       };
+
     render() {
         var title = "Sign Up";
 
-        const signin = this.props.join
-        var button = <Link color="light" onClick={this.toggle}>Sign Up </Link>;
-        if (signin) {
-            title = "Sign up";
+        const signup = this.props.join
+        var button = <Link onClick={this.toggle}>CreateMeeting </Link>;
+        if (signup) {
+            title = "Create Meeting";
       
             button = (
-                <Link
-                color="light"
-                className="button button-light button-wide-mobile button-sm"
+              <Link
+                className="float-center"
                 onClick={this.toggle}
-                
-                href=""
               >
-                Sign Up
+                Create Meeting
               </Link>
             );
           }
@@ -39,10 +38,11 @@ class SignInModal extends Component {
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
                     <ModalBody>
-                    <Signup
+                    <AuthProvider>
+                    <CreateMeeting
                         toggle={this.toggle}
                     />
-                    
+                    </AuthProvider>
                     </ModalBody>
 
                 </Modal>
@@ -51,4 +51,4 @@ class SignInModal extends Component {
     }
 }
 
-export default SignInModal;
+export default CreateMeetingModal;
