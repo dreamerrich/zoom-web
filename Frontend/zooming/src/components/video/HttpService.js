@@ -18,6 +18,7 @@ export class Http {
     const url = `${this.baseUri}/${urlPart}`;
     return fetch(url, {
       method: "POST",
+      mode: 'no-cors', 
       body: JSON.stringify(params),
       headers: this.headers
     }).then(p);

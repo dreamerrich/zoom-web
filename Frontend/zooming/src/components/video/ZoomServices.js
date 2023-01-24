@@ -1,6 +1,6 @@
 import { Http } from "./HttpService";
 
-const apiUrl = "https://8000";
+const apiUrl = "https://api.zoom.us/v2";
 const http = new Http(apiUrl);
 
 export const getSignature = (params) => {

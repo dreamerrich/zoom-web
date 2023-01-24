@@ -1,13 +1,16 @@
 import jwt
-import datetime
+from datetime import datetime
 import requests
 import json
+from zoomclone import settings
 
 
 class ZoomMeetings:
     def __init__(self,api_key,secret_key,user_email):
+        api_key = settings.API_KEY
+        secret_key = settings.SECRET_KEY
         self.time_now = datetime.datetime.now()
-        self.expiration_time = self.time_now+datetime.timedelta(minutes=20)
+        self.expiration_time = self.time_now+datetime.timedelta(minutes=40)
         self.expiration_in_seconds = round(self.expiration_time.timestamp())
         # token requirements
         self.headers = {"alg": "HS256","typ": "JWT"}
@@ -19,9 +22,9 @@ class ZoomMeetings:
         self.email = user_email
 
     def CreateMeeting(self,date,topic,meeting_duration,meeting_password):
-        required_date_format = date.strftime("%Y-%m-%dT%H:%M:%SZ")
+        date = datetime.datetime(2023,1,23).strftime("%Y-%m-%dT%H:%M:%SZ")
         url = 'https://api.zoom.us/v2/users/'+self.email+'/meetings'
-        jsonObj = {"topic": topic, "start_time":required_date_format,"duration":meeting_duration,"password":meeting_password}
+        jsonObj = {"topic": topic, "start_time":date,"duration":meeting_duration,"password":meeting_password}
         header = {'authorization': 'Bearer '+self.request_token}
         zoom_create_meeting = requests.post(url,json=jsonObj, headers=header)
         return json.loads(zoom_create_meeting.text)

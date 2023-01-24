@@ -14,11 +14,12 @@ from django.contrib.auth import authenticate
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework import filters
-from django.http import Http404
+from django_zoom_meetings import ZoomMeetings
+from zoomclone import settings
+import datetime
 import jwt
 import requests
 import json
-from time import time
 
 # Create your views here.
 class RegisterApiView(APIView):
@@ -48,9 +49,7 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
         if serializer.is_valid():
             username = request.data.get("username", None)
-            print("🚀 ~ file: views.py ~ line 37 ~ username", username)
             password = request.data.get("password")
-            print("🚀 ~ file: views.py ~ line 39 ~ password", password)
             try:
                 user = User.objects.get(username=username)
             except:
@@ -61,7 +60,7 @@ class LoginView(APIView):
             token = RefreshToken.for_user(user)
 
             user = authenticate(username=username, password=password)
-            print("🚀 ~ file: views.py ~ line 42 ~ user", user)
+            
             if user is not None:
                 payload = JWT_PAYLOAD_HANDLER(user)
                 # jwt_token = JWT_ENCODE_HANDLER(payload)
@@ -103,3 +102,35 @@ class joinMeeting(APIView):
                 passcode = None
                 return Response({"error": "Your meeting_id and passcode is not correct. Please try again."})
 
+
+#------------------------- create meeting ---------------------------
+
+class ZoomMeetings(APIView):
+    serializer_class = createMeeting
+
+    def __init__(self,email='richidhimar45@gmail.com',api_key=settings.API_KEY,secret_key=settings.SECRET_KEY):
+        self.time_now = datetime.datetime.now()
+        self.expiration_time = self.time_now+datetime.timedelta(minutes=40)
+        self.expiration_in_seconds = round(self.expiration_time.timestamp())
+        # self.secret_key = settings.SECRET_KEY
+        self.headers = {"alg": "HS256","typ": "JWT"}
+        self.payload = {"iss": api_key,"exp": self.expiration_in_seconds}
+
+        self.request_token = jwt.encode(self.payload,secret_key,algorithm="HS256",headers=self.headers)
+        
+        self.email = email
+
+    def post(self,date,topic=None,duration=None,password=None):
+            date = datetime.datetime.now()
+            url = 'https://api.zoom.us/v2/users/'+self.email+'/meetings'
+            jsonObj = {"topic": "", "start_time":date.strftime("%d/%m/%y"),"duration":"","password":""}
+            header = {'authorization': 'Bearer '+self.request_token}
+            zoom_create_meeting = requests.post(url,json=jsonObj, headers=header)
+            return Response(zoom_create_meeting.text)
+            # return json.loads(zoom_create_meeting.text)
+
+    def get(self,meeting_id):
+        url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
+        header = {'authorization': 'Bearer '+self.request_token}
+        get_zoom_meeting = requests.get(url, headers=header)
+        return Response(get_zoom_meeting.text)

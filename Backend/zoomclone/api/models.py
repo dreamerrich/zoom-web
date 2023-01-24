@@ -60,7 +60,5 @@ class meetingDetail(models.Model):
 
 class createMeeting(models.Model):
     agenda = models.CharField(max_length=255)
-    topic = models.CharField(max_length=255)
-    date = models.DateField()
     duration = models.CharField(max_length=10)
     

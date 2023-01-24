@@ -64,6 +64,7 @@ export const AuthProvider = ({ children }) => {
     if (response.status === 201) {
       history.push("");
       alert("Successfully registered")
+      // alert(<JoinMeetingModal/>)
     } else {
      
       alert("Something went wrong!");
@@ -77,24 +78,32 @@ export const AuthProvider = ({ children }) => {
     history.push("/");
   };
 
-  const CreateMeeting = async (agenda, topic, date, duration) => {
-    const response = await fetch("http://127.0.0.1:8000/createMeeting", {
+  const CreateMeeting = async (topic, date, duration) => {
+    const response = await fetch("http://127.0.0.1:8000/createmeet", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        agenda,
         topic,
         date,
         duration,
       })
     });
-    if (response.status === 201) {
-      history.push("");
+    if (response.status === 200) {
+      const data = response.json()
+      data.then((s) => {
+        const detail = {data: JSON.parse(s)} 
+        const url = detail.data.join_url;
+        const id = detail.data.id;
+        const passcode = detail.data.password;
+        const meeting = {url:url, id:id, passcode:passcode}
+        localStorage.setItem('data', JSON.stringify(meeting))
+      })
+      history.push("/Join");
       alert("Successfully registered")
     } else {
-     
+      console.log(">>>>>>>>>>error")
       alert("Something went wrong!");
     }
   }
@@ -122,3 +131,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+
