@@ -94,13 +94,13 @@ class joinMeeting(APIView):
         if serializer.is_valid():
             meeting_id = request.data.get("meeting_id", None)
             passcode = request.data.get("passcode", None)
-            try:
-                meeting_id = User.objects.get(meeting_id=meeting_id)
-                passcode = joinMeeting.objects.get(passcode=passcode)
-            except:
-                meeting_id = None
-                passcode = None
-                return Response({"error": "Your meeting_id and passcode is not correct. Please try again."})
+            # try:
+            #     # meeting_id = .objects.get(meeting_id=meeting_id)
+            #     # passcode = .objects.get(passcode=passcode)
+            # except:
+            #     meeting_id = None
+            #     passcode = None
+            #     return Response({"error": "Your meeting_id and passcode is not correct. Please try again."})
 
 
 #------------------------- create meeting ---------------------------
@@ -112,7 +112,7 @@ class ZoomMeetings(APIView):
         self.time_now = datetime.datetime.now()
         self.expiration_time = self.time_now+datetime.timedelta(minutes=40)
         self.expiration_in_seconds = round(self.expiration_time.timestamp())
-        # self.secret_key = settings.SECRET_KEY
+        
         self.headers = {"alg": "HS256","typ": "JWT"}
         self.payload = {"iss": api_key,"exp": self.expiration_in_seconds}
 
@@ -120,17 +120,34 @@ class ZoomMeetings(APIView):
         
         self.email = email
 
-    def post(self,date,topic=None,duration=None,password=None):
+    def post(self,request,topic=None,duration=None,password=None):
+            serializer_class = createMeeting(data=request.data)
             date = datetime.datetime.now()
             url = 'https://api.zoom.us/v2/users/'+self.email+'/meetings'
             jsonObj = {"topic": "", "start_time":date.strftime("%d/%m/%y"),"duration":"","password":""}
             header = {'authorization': 'Bearer '+self.request_token}
             zoom_create_meeting = requests.post(url,json=jsonObj, headers=header)
-            return Response(zoom_create_meeting.text)
-            # return json.loads(zoom_create_meeting.text)
+            meet_detail = zoom_create_meeting.text
+            detail = json.loads(meet_detail)
+            data = {
+                "url" : detail['join_url'],
+                "meeting_id" : detail['id'],
+                "passcode" : detail['password']
+            }
+            print(">>>>>>>",data)
+            meeting = meetingDetail.objects.create(**data)
+            if serializer_class.is_valid():  
+                serializer_class.save()
+                return Response()
+            return Response("Bad request")
 
     def get(self,meeting_id):
         url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
         header = {'authorization': 'Bearer '+self.request_token}
         get_zoom_meeting = requests.get(url, headers=header)
-        return Response(get_zoom_meeting.text)
+        return Response(get_zoom_meeting)
+    
+class DetailMeet(APIView):
+    def get(self, request):
+        queryset = meetingDetail.objects.all()
+        serializer_classes = meetingDetail(queryset, filter(id).latest())

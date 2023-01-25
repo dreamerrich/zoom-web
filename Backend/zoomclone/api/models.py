@@ -4,19 +4,19 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class UserManager(BaseUserManager):
-    def create_user(self, username, password=None, password2=None):
+    def create_user(self, username, email, password=None, password2=None):
         if not username:
             raise ValueError('Users must have a name')
         user = self.model(
-            username=self.normalize_email(username),
+            username=self.normalize_email(email),
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
     
-    def create_superuser(self, username, password=None,password2=None):
+    def create_superuser(self, email, password=None,password2=None):
         user = self.create_user(
-            username=username,
+            username=email,
             password=password,
         )
         user.is_admin = True
@@ -36,7 +36,7 @@ class CustomUser(AbstractBaseUser):
     username = models.CharField(max_length=255,unique=True,null=True)
     objects = UserManager()
 
-    USERNAME_FIELD = 'username'
+    USERNAME_FIELD = 'email'
 
     def __str__(self):  
         return self.username
@@ -55,10 +55,18 @@ class CustomUser(AbstractBaseUser):
 
 
 class meetingDetail(models.Model):
-    meeting_id = models.CharField(max_length=255)
-    passcode = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, null=True)
+    meeting_id = models.CharField(max_length=255, null=True)
+    passcode = models.CharField(max_length=255, null=True)
+
+    def __str__(self):
+        return self.meeting_id
 
 class createMeeting(models.Model):
-    agenda = models.CharField(max_length=255)
-    duration = models.CharField(max_length=10)
+    # meeting = models.ForeignKey(meetingDetail, on_delete=models.CASCADE, null=True)
+    topic = models.CharField(max_length=255, null=True)
+    start_time = models.DateField(null=True)
+    duration = models.TimeField(null=True)
+
+
     

@@ -5,7 +5,6 @@ import AuthContext from '../../login/AuthContext';
 
 const SignIn = () => {
   const { loginUser } = useContext(AuthContext);
-   
   const handleSubmit = e => {
     e.preventDefault();
     const username = e.target.username.value;
@@ -31,7 +30,7 @@ const SignIn = () => {
                         id='password'
                         required
                     />&nbsp; <br />
-                    <Button color="light">SignIn</Button> &nbsp; &nbsp; <br/>
+                    <Button color="light" >SignIn</Button> &nbsp; &nbsp; <br/>
                     <br />
                     <input 
                     type="checkbox"

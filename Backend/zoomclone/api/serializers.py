@@ -62,3 +62,8 @@ class createMeeting(serializers.ModelSerializer):
   class Meta:
     model = createMeeting
     fields = '__all__'
+
+class meetingDetail(serializers.ModelSerializer):
+  class Meta:
+    model = meetingDetail
+    fields = '__all__'

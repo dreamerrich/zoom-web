@@ -63,6 +63,7 @@ export const AuthProvider = ({ children }) => {
     });
     if (response.status === 201) {
       history.push("");
+      localStorage.setItem("email", JSON.stringify(email))
       alert("Successfully registered")
       // alert(<JoinMeetingModal/>)
     } else {
@@ -91,6 +92,7 @@ export const AuthProvider = ({ children }) => {
       })
     });
     if (response.status === 200) {
+      localStorage.getItem('email')
       const data = response.json()
       data.then((s) => {
         const detail = {data: JSON.parse(s)} 
