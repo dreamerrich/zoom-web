@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import Logo from './partials/Logo';
-import HsignInModal from '../pages/HsignInModal';
+import SignInModal from '../pages/SignInModal';
 import CreateMeetingModal from '../video/CreatemeetingModal';
-
+import AuthContext from '../../login/AuthContext';
 
 const propTypes = {
   navPosition: PropTypes.string,
@@ -34,11 +34,12 @@ const Header = ({
   ...props
 }) => {
   
+  const {logoutUser} = useContext(AuthContext)
   const [isActive, setIsactive] = useState(false);
- 
   const nav = useRef(null);
   const hamburger = useRef(null);
-  
+ 
+  const token = localStorage.getItem("authTokens");
   useEffect(() => {
     isActive && openMenu();
     document.addEventListener('keydown', keyPress);
@@ -77,9 +78,7 @@ const Header = ({
     bottomOuterDivider && 'has-bottom-divider',
     className
     );
-  
-  
- 
+
   return (
     <header
       {...props}
@@ -133,27 +132,26 @@ const Header = ({
                       <CreateMeetingModal join={true}/>
                     </li>
                     <li>
-                      <a href={`https://zoom.us/oauth/authorize?response_type=code&client_id=56cqnjWXS4CoW7KG76zvgg&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fzoom%2Faouthredirect}`} onClick={closeMenu}>Join</a>
+                      <a href={`https://zoom.us/join`} onClick={closeMenu}>Join</a>
                     </li>
                     <li>
                       
                     </li>
                   </ul>
+                 
                   {!hideSignin &&
-                    <ul
-                      className="list-reset header-nav-right"
-                    >
- 
-                    
-                      <li>
-                        <HsignInModal join={true} />
-                      </li> 
-                   
-                      <li>
-                       
-                      </li>
-                   
+                    <ul className="list-reset header-nav-right">
+                   {token ? 
+                    <li>
+                      <Link to="#" onClick={logoutUser}>Logout</Link>
+                    </li>
+                      : 
+                    <li>
+                      <Link to="#" onClick={openMenu}><SignInModal/></Link> 
+                    </li>
+                   } 
                     </ul>}
+                    
                 </div>
               </nav>
             </div>}

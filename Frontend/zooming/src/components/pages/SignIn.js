@@ -5,16 +5,17 @@ import AuthContext from '../../login/AuthContext';
 
 const SignIn = () => {
   const { loginUser } = useContext(AuthContext);
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
+      const username = e.target.username.value;
+      const password = e.target.password.value;
     e.preventDefault();
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-    username.length > 0 && loginUser(username, password);
+    loginUser(username, password);
   };
+
 
     return(
         <Fragment>
-            <Form onSubmit={handleSubmit} className='text-center'>
+            <Form  onSubmit={handleSubmit} className='text-center'>
                 <FormGroup>
                     <Input
                         type="text"

@@ -53,17 +53,9 @@ class LoginSerializer(serializers.Serializer):
       model = User
       fields = '__all__'
 
-class meetingData(serializers.ModelSerializer):
+class Meetings(serializers.ModelSerializer):
+  
   class Meta:
-    model = meetingDetail
+    model = CreateMeeting
     fields = '__all__'
 
-class createMeeting(serializers.ModelSerializer):
-  class Meta:
-    model = createMeeting
-    fields = '__all__'
-
-class meetingDetail(serializers.ModelSerializer):
-  class Meta:
-    model = meetingDetail
-    fields = '__all__'

@@ -4,7 +4,6 @@ import SignIn from './SignIn';
 import { Link } from 'react-router-dom';
 import { AuthProvider } from '../../login/AuthContext';
 
-
 class SignInModal extends Component {
     state = {
         modal: false
@@ -16,16 +15,15 @@ class SignInModal extends Component {
         }));
       };
     render() {
+        
         var title = "Sign In";
-
         const signin = this.props.join
         var button = <Link className="button button-light button-wide-mobile button-sm" onClick={this.toggle}>Sign In</Link>;
+        
         if (signin) {
             title = "Sign In";
       
-            button = (
-                <Link className="button button-light button-wide-mobile button-sm" onClick={this.toggle}>Sign In</Link>
-            );
+           
           }
         return (
             <Fragment> 
