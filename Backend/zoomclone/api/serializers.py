@@ -54,7 +54,6 @@ class LoginSerializer(serializers.Serializer):
       fields = '__all__'
 
 class Meetings(serializers.ModelSerializer):
-  
   class Meta:
     model = CreateMeeting
     fields = '__all__'
