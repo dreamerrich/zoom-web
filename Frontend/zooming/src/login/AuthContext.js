@@ -40,7 +40,6 @@ export const AuthProvider = ({ children }) => {
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
       alert("login Successfully");
-      
       history.push("/");
     } else {
       alert("Something went wrong!");
@@ -66,7 +65,6 @@ export const AuthProvider = ({ children }) => {
       history.push("");
       localStorage.setItem("email", JSON.stringify(email))
       alert("Successfully registered")
-      // alert(<JoinMeetingModal/>)
     } else {
      
       alert("Something went wrong!");
@@ -93,18 +91,8 @@ export const AuthProvider = ({ children }) => {
       })
     });
     if (response.status === 200) {
-      localStorage.getItem('email')
-      const data = response.json()
-      data.then((s) => {
-        const detail = {data: JSON.parse(s)} 
-        const url = detail.data.join_url;
-        const id = detail.data.id;
-        const passcode = detail.data.password;
-        const meeting = {url:url, id:id, passcode:passcode}
-        localStorage.setItem('data', JSON.stringify(meeting))
-      })
-      history.push("/Join");
-      alert("Successfully registered")
+      alert("Successfully Created Meeting")
+      history.push("/");
     } else {
       console.log(">>>>>>>>>>error")
       alert("Something went wrong!");

@@ -58,7 +58,7 @@ class Meetings(serializers.ModelSerializer):
     model = CreateMeeting
     fields = '__all__'
 
-'''crud operation with serializer'''
+'''crud operation with serializer by subhash sir'''
 
 class detailSerializer(serializers.ModelSerializer):
    class Meta:

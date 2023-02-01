@@ -16,11 +16,11 @@ class CreateMeetingModal extends Component {
       };
 
     render() {
-        var title = "Sign Up";
+        var title = "Create Meeting";
 
-        const signup = this.props.join
+        const create = this.props.join
         var button = <Link onClick={this.toggle}>CreateMeeting </Link>;
-        if (signup) {
+        if (create) {
             title = "Create Meeting";
       
             button = (

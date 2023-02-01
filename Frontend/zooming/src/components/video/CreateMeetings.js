@@ -1,7 +1,6 @@
 import React, { useContext,useState} from 'react';
 import { Button, Form, FormGroup, Input } from 'reactstrap';
 import AuthContext from '../../login/AuthContext';
-// import { createMeeting } from './ZoomServices';
 
 function CreateMeeting() {
     
@@ -12,12 +11,15 @@ function CreateMeeting() {
     const [duration, setDuration] = useState("");
     
     const { CreateMeeting } = useContext(AuthContext);
+    const token = localStorage.getItem("authTokens");
 
     const handleSubmit = async e => {
       e.preventDefault();
       CreateMeeting( topic, start_time, duration );
   };
     return (
+        <div>
+        { token ?
         <div>
         <p>Schedule</p>
         <Form style={{textAlign:"left"}} onSubmit={handleSubmit}>
@@ -31,7 +33,7 @@ function CreateMeeting() {
                     required
                 />&nbsp; 
                 <Input
-                    type="date"
+                    type="datetime-local"
                     name="start_time"
                     id="start_time"
                     placeholder='date'
@@ -39,7 +41,7 @@ function CreateMeeting() {
                     required
                 />&nbsp;
                 <Input
-                        type="time"
+                        type="minutes"
                         name="time"
                         id="time"
                         placeholder='duration'
@@ -50,6 +52,10 @@ function CreateMeeting() {
                 <Button type='submit'>Create Meeting</Button>
             </FormGroup>
         </Form>
+        </div>
+        :
+            <h4>Please Login</h4>
+    }
       </div>  
     )
     

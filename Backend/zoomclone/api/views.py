@@ -44,7 +44,7 @@ class LoginView(APIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
 
-    def get(self, request):
+    def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         if serializer.is_valid():
@@ -87,7 +87,7 @@ class LoginView(APIView):
 
 class ZoomMeetings(APIView):
     serializer_class = Meetings
-
+    
     def __init__(self,email='richidhimar45@gmail.com',api_key=settings.API_KEY,secret_key=settings.SECRET_KEY):
         self.time_now = datetime.datetime.now()
         self.expiration_time = self.time_now+datetime.timedelta(minutes=40)
@@ -112,14 +112,13 @@ class ZoomMeetings(APIView):
             if serializer_class.is_valid():
                  serializer_class.save(
                      topic=request.data['topic'],
-                     start_time=request.data['start_time'],
+                     start_time=request.data['date'],
                      duration=request.data['duration'],
                      url=detail['join_url'],
                      meeting_id=detail['id'],
                      passcode=detail['password']
                  )
                  mymail()
-                 
             return Response(serializer_class.data)
 
     def get(self,meeting_id):
@@ -137,7 +136,7 @@ def mymail():
     fail_silently=False) 
     
 
-'''Crud operation with serializer'''
+'''Crud operation with serializer by subhash sir'''
 class CrudoperationAPIView(APIView): 
     def get(self, request):
         queryset = Detail.objects.all()

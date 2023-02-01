@@ -38,8 +38,8 @@ const Header = ({
   const [isActive, setIsactive] = useState(false);
   const nav = useRef(null);
   const hamburger = useRef(null);
- 
   const token = localStorage.getItem("authTokens");
+  
   useEffect(() => {
     isActive && openMenu();
     document.addEventListener('keydown', keyPress);
@@ -129,7 +129,7 @@ const Header = ({
                       <Link to="/Plans" onClick={openMenu}>Plans & Pricing</Link>
                     </li>
                     <li>
-                      <CreateMeetingModal join={true}/>
+                      <CreateMeetingModal/>
                     </li>
                     <li>
                       <a href={`https://zoom.us/join`} onClick={closeMenu}>Join</a>
