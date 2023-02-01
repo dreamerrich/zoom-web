@@ -102,32 +102,25 @@ class ZoomMeetings(APIView):
 
     def post(self,request):
             serializer_class = Meetings(data=request.data)
-            print("=-=-=-=-=serializer_class",request.data['topic'],request.data['start_time'],request.data['duration'])
             date = datetime.datetime.now()
             url = 'https://api.zoom.us/v2/users/'+self.email+'/meetings'
             jsonObj = {"topic":request.data['topic'], "start_time": date.strftime('%Y/%m/%d,%H:%M:%SZ'),"duration":request.data['duration']}
             header = {'authorization': 'Bearer '+self.request_token}
             zoom_create_meeting = requests.post(url,json=jsonObj, headers=header)
             meet_detail = zoom_create_meeting.text
-            print("🚀 ~ file: views.py:112 ~ meet_detail", meet_detail)
             detail = json.loads(meet_detail)
-            print("🚀 ~ file: views.py:139 ~ detail", detail)
-            data = {
-                "url" : detail['join_url'],
-                "meeting_id" : detail['id'],
-                "passcode" : detail['password']
-            }
-            print("🚀 ~ file: views.py:116 ~ data", data)
-            serializer_class["url"] : detail.join_url
-            print("🚀 ~ file: views.py:121 ~ serializer_class", serializer_class)
-            if serializer_class.is_valid(): 
-                 serializer_class['meeting_id'] : detail["id"]
-                 serializer_class['passcode'] : detail["password"]  
-                 serializer_class.save()
-                # send_mail()
-                 return Response(serializer_class.data)
-
-            
+            if serializer_class.is_valid():
+                 serializer_class.save(
+                     topic=request.data['topic'],
+                     start_time=request.data['start_time'],
+                     duration=request.data['duration'],
+                     url=detail['join_url'],
+                     meeting_id=detail['id'],
+                     passcode=detail['password']
+                 )
+                 mymail()
+                 
+            return Response(serializer_class.data)
 
     def get(self,meeting_id):
         url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
@@ -136,10 +129,51 @@ class ZoomMeetings(APIView):
         return Response(get_zoom_meeting)
     
 
-class send_mail():
-    subject = 'Zoom Meeting Link'
-    message = f'Hello here is your zoom meeting link {CreateMeeting.url} your meeting Id {CreateMeeting.meeting_id} and password {CreateMeeting.passcode}'
-    email_form = settings.EMAIL_HOST_USER
-    recipient_list = [User.email ]
-    mail = (subject, message, email_form, recipient_list)
+def mymail():
+    send_mail(subject = 'Zoom Meeting Link',
+    message = f'Hello here is your zoom meeting link {CreateMeeting.url} your meeting Id {CreateMeeting.meeting_id} and password {CreateMeeting.passcode}',
+    from_email = settings.EMAIL_HOST_USER,
+    recipient_list = ['richidhimar45@gmail.com'],
+    fail_silently=False) 
     
+
+'''Crud operation with serializer'''
+class CrudoperationAPIView(APIView): 
+    def get(self, request):
+        queryset = Detail.objects.all()
+        serializers_class = detailSerializer(queryset, many=True)
+        return Response(serializers_class.data)
+    
+    def post(self, request):
+        serializer_class = detailSerializer(data=request.data)
+        if serializer_class.is_valid():
+            serializer_class.save()
+            return Response(serializer_class.data)
+        return Response(serializer_class.errors)
+    
+    def patch(self, request, pk, format=None):
+        data_id = Detail.objects.get(id=pk)
+        print("🚀 ~ file: views.py:163 ~ pk", data_id)
+        serializer_class = detailSerializer(data_id, data=request.data)
+        if data_id == None:
+            return Response("No data")
+        if serializer_class.is_valid():
+            serializer_class.save()
+            return Response(serializer_class.data)
+        return Response("Invalid updates")
+    
+    def put(self, request, pk, format=None):
+        data_id = Detail.objects.get(id=pk)
+        print("🚀 ~ file: views.py:163 ~ pk", data_id)
+        serializer_class = detailSerializer(data_id, data=request.data, partial=True)
+        if data_id == None:
+            return Response("No data")
+        if serializer_class.is_valid():
+            serializer_class.save()
+            return Response(serializer_class.data)
+        return Response("Invalid updates")
+    
+    def delete(self, request, pk):
+        data_delete = Detail.objects.get(id=pk)
+        data_delete.delete()
+        return Response("Data deleted")

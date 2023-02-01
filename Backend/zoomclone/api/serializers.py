@@ -58,3 +58,9 @@ class Meetings(serializers.ModelSerializer):
     model = CreateMeeting
     fields = '__all__'
 
+'''crud operation with serializer'''
+
+class detailSerializer(serializers.ModelSerializer):
+   class Meta:
+      model = Detail
+      fields = '__all__'
