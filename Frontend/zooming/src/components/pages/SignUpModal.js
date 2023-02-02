@@ -18,12 +18,12 @@ class SignUpModal extends Component {
         var title = "Sign Up";
 
         const signup = this.props.join
-        var button = <Link onClick={this.toggle}>Sign Up </Link>;
+        var button = <Link to={"#"} onClick={this.toggle}>Sign Up </Link>;
         if (signup) {
             title = "Sign Up";
       
             button = (
-              <Link
+              <Link to={"#"}
                 className="float-center"
                 onClick={this.toggle}
               >

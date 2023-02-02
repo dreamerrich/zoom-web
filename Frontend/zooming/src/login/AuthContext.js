@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
     });
     if (response.status === 200) {
       alert("Successfully Created Meeting")
-      history.push("/");
+      history.push("/MeetingDetail");
     } else {
       console.log(">>>>>>>>>>error")
       alert("Something went wrong!");

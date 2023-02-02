@@ -18,12 +18,18 @@ class SignInModal extends Component {
         
         var title = "Sign In";
         const signin = this.props.join
-        var button = <Link className="button button-light button-wide-mobile button-sm" onClick={this.toggle}>Sign In</Link>;
+        var button = <Link to={"#"} onClick={this.toggle}>Sign In</Link>;
         
         if (signin) {
             title = "Sign In";
-      
-           
+
+            button = (
+              <Link to={"#"}
+                onClick={this.toggle}
+              >
+                Sign In
+              </Link>
+            )
           }
         return (
             <Fragment> 

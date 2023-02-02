@@ -86,7 +86,7 @@ class LoginView(APIView):
 #------------------------- create meeting ---------------------------
 
 class ZoomMeetings(APIView):
-    serializer_class = Meetings
+    serializer_class = MeetingSerializer
     
     def __init__(self,email='richidhimar45@gmail.com',api_key=settings.API_KEY,secret_key=settings.SECRET_KEY):
         self.time_now = datetime.datetime.now()
@@ -101,10 +101,10 @@ class ZoomMeetings(APIView):
         self.email = email
 
     def post(self,request):
-            serializer_class = Meetings(data=request.data)
+            serializer_class = MeetingSerializer(data=request.data)
             date = datetime.datetime.now()
             url = 'https://api.zoom.us/v2/users/'+self.email+'/meetings'
-            jsonObj = {"topic":request.data['topic'], "start_time": date.strftime('%Y/%m/%d,%H:%M:%SZ'),"duration":request.data['duration']}
+            jsonObj = {"topic":request.data['topic'], "start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ'),"duration":request.data['duration']}
             header = {'authorization': 'Bearer '+self.request_token}
             zoom_create_meeting = requests.post(url,json=jsonObj, headers=header)
             meet_detail = zoom_create_meeting.text
@@ -118,8 +118,21 @@ class ZoomMeetings(APIView):
                      meeting_id=detail['id'],
                      passcode=detail['password']
                  )
-                 mymail()
+                 m_url = detail['join_url']
+                 print("🚀 ~ file: views.py:122 ~ m_url", m_url)
+                 m_id = detail['id']
+                 print("🚀 ~ file: views.py:124 ~ m_id", m_id)
+                 m_passcode = detail['password']
+                 print("🚀 ~ file: views.py:126 ~ m_passcode", m_passcode)
+                 send_mail(subject = 'Zoom Meeting Link',
+                    message = f'Hey there here is your zoom meeting LINK : {m_url} your meeting ID : {m_id} and PASSWORD : {m_passcode}',
+                    from_email = settings.EMAIL_HOST_USER,
+                    recipient_list = ['richidhimar45@gmail.com'],
+                    fail_silently=False) 
             return Response(serializer_class.data)
+    
+    def put():
+        return Response()
 
     def get(self,meeting_id):
         url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
@@ -127,15 +140,6 @@ class ZoomMeetings(APIView):
         get_zoom_meeting = requests.get(url, headers=header)
         return Response(get_zoom_meeting)
     
-
-def mymail():
-    send_mail(subject = 'Zoom Meeting Link',
-    message = f'Hello here is your zoom meeting link {CreateMeeting.url} your meeting Id {CreateMeeting.meeting_id} and password {CreateMeeting.passcode}',
-    from_email = settings.EMAIL_HOST_USER,
-    recipient_list = ['richidhimar45@gmail.com'],
-    fail_silently=False) 
-    
-
 '''Crud operation with serializer by subhash sir'''
 class CrudoperationAPIView(APIView): 
     def get(self, request):

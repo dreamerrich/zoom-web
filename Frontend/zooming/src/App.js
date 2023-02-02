@@ -11,6 +11,11 @@ import LayoutDefault from './layouts/LayoutDefault';
 import Home from './views/Home';
 import Plans from './components/sections/Plans&pricing';
 import Product from './components/sections/Product';
+import CreateMeeting from './components/video/CreateMeetings';
+import MeetingDetail from './components/video/MeetingDetail';
+import ListMeeting from './components/video/ListMeetings';
+import DashBoard from './login/DashBoard';
+import { AuthProvider } from './login/AuthContext';
 
 // Initialize Google Analytics
 ReactGA.initialize(process.env.REACT_APP_GA_CODE);
@@ -37,11 +42,19 @@ const App = () => {
     <ScrollReveal
       ref={childRef}
       children={() => (
+        <div>
+        <AuthProvider>
         <Switch>
           <AppRoute exact path="/" component={Home} layout={LayoutDefault} />
           <Route exact path="/plans" component={Plans} />
           <Route exact path="/Product" component={Product} />
+          <Route exact path="/CreateMeeting" component={CreateMeeting} />
+          <Route exact path="/MeetingDetail" component={MeetingDetail} />
+          <Route exact path="/ListMeeting" component={ListMeeting} />
+          <Route exact path="/Dashboard" component={DashBoard} />
         </Switch>
+        </AuthProvider>
+        </div>
       )} />
   );
 }

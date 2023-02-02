@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import Logo from './partials/Logo';
 import SignInModal from '../pages/SignInModal';
-import CreateMeetingModal from '../video/CreatemeetingModal';
 import AuthContext from '../../login/AuthContext';
 
 const propTypes = {
@@ -35,6 +34,12 @@ const Header = ({
 }) => {
   
   const {logoutUser} = useContext(AuthContext)
+  const handleClick = async e => {
+    e.preventDefault();
+    logoutUser();
+  };
+
+
   const [isActive, setIsactive] = useState(false);
   const nav = useRef(null);
   const hamburger = useRef(null);
@@ -117,7 +122,7 @@ const Header = ({
                       navPosition && `header-nav-${navPosition}`
                     )}>
                     <li>
-                      <Link to="/Product" onClick={closeMenu}>Products</Link>
+                      <Link to="/Product" onClick={openMenu}>Products</Link>
                     </li>
                     <li>
                       <Link to="#solutions" onClick={closeMenu}>Solutions</Link>
@@ -129,10 +134,10 @@ const Header = ({
                       <Link to="/Plans" onClick={openMenu}>Plans & Pricing</Link>
                     </li>
                     <li>
-                      <CreateMeetingModal/>
+                    <Link to="/CreateMeeting" onClick={openMenu}>Create Meeting</Link>
                     </li>
                     <li>
-                      <a href={`https://zoom.us/join`} onClick={closeMenu}>Join</a>
+                      <Link to={`https://zoom.us/join`} onClick={closeMenu}>Join</Link>
                     </li>
                     <li>
                       
@@ -143,7 +148,7 @@ const Header = ({
                     <ul className="list-reset header-nav-right">
                    {token ? 
                     <li>
-                      <Link to="#" onClick={logoutUser}>Logout</Link>
+                      <Link to="#" onClick={handleClick}>Logout</Link>
                     </li>
                       : 
                     <li>

@@ -8,14 +8,17 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.15",
     "react": "^16.13.1",
+    "react-avatar-edit": "^1.2.0",
     "react-axios": "^2.0.6",
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "5.0.1",
     "react-simple-oauth2-login": "^0.5.4",
+    "react-timezone-select": "^1.4.0",
     "reactstrap": "^9.1.5",
-    "sass": "^1.49.7"
+    "sass": "^1.49.7",
+    "spacetime": "^7.4.1"
   },
   "repository": {
     "type": "git",
