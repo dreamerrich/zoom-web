@@ -6,8 +6,7 @@ import { SectionTilesProps } from '../../utils/SectionProps';
 import Button from '../elements/Button';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
-// import TimezoneSelect, { allTimezones } from 'react-timezone-select';
-// import spacetime from "spacetime";
+
 
 const propTypes = {
     ...SectionTilesProps.types

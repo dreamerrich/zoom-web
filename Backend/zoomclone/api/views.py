@@ -39,6 +39,14 @@ class RegisterApiView(APIView):
             return Response(serializer_class.data, status=status.HTTP_201_CREATED)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+# ------------- User get api -----------------
+class Profile(APIView):
+    def get(self, request):
+        data = User.objects.all()
+        serializer = RegisterSerializer(data, many=True)
+        return Response(serializer.data)
+
 # ------------- login view -----------------
 class LoginView(APIView):
     permission_classes = (AllowAny,)
@@ -49,39 +57,34 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
         if serializer.is_valid():
             username = request.data.get("username", None)
-            print("🚀 ~ file: views.py:58 ~ email", username)
             password = request.data.get("password")
             try:
                 user = User.objects.get(username=username)
             except:
                 user = None
                 return Response({"error": "Your username is not correct. Please try again or register your details"})
-            # if user.user_type == 'user':
-                # print('',user)
-            token = RefreshToken.for_user(user)
 
             user = authenticate(username=username, password=password)
+            token = RefreshToken.for_user(user)
             
             if user is not None:
                 payload = JWT_PAYLOAD_HANDLER(user)
-                # jwt_token = JWT_ENCODE_HANDLER(payload)
+                jwt_token = JWT_ENCODE_HANDLER(payload)
                 jwt_access_token_lifetime =  settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                 jwt_refresh_token_lifetime =  settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
                 update_last_login(None, user)
                 response = {
-                                    'success': 'True',
                                     'status code': status.HTTP_200_OK,
                                     'message': 'User logged in successfully',
                                     'access': str(token.access_token),
                                     'referesh_token':str(token),
                                     "access_token_life_time_in_seconds" : jwt_access_token_lifetime.total_seconds(),
                                     "refresh_token_life_time_in_seconds" : jwt_refresh_token_lifetime.total_seconds(),
-                                }
+                            }
                 status_code = status.HTTP_200_OK
                 return Response(response, status=status_code)
             else:
                 return Response({"error": 'Your password is not correct please try again or reset your password'}, status=401)
-
 
 #------------------------- create meeting ---------------------------
 
@@ -112,18 +115,15 @@ class ZoomMeetings(APIView):
             if serializer_class.is_valid():
                  serializer_class.save(
                      topic=request.data['topic'],
-                     start_time=request.data['date'],
+                     start_time=request.data['start_time'],
                      duration=request.data['duration'],
                      url=detail['join_url'],
                      meeting_id=detail['id'],
                      passcode=detail['password']
                  )
                  m_url = detail['join_url']
-                 print("🚀 ~ file: views.py:122 ~ m_url", m_url)
                  m_id = detail['id']
-                 print("🚀 ~ file: views.py:124 ~ m_id", m_id)
                  m_passcode = detail['password']
-                 print("🚀 ~ file: views.py:126 ~ m_passcode", m_passcode)
                  send_mail(subject = 'Zoom Meeting Link',
                     message = f'Hey there here is your zoom meeting LINK : {m_url} your meeting ID : {m_id} and PASSWORD : {m_passcode}',
                     from_email = settings.EMAIL_HOST_USER,
@@ -140,6 +140,19 @@ class ZoomMeetings(APIView):
         get_zoom_meeting = requests.get(url, headers=header)
         return Response(get_zoom_meeting)
     
+class MeetingList(APIView):
+    def get(self, request):
+        queryset = CreateMeeting.objects.all()
+        serializer_class = MeetingSerializer(queryset, many=True)
+        print("🚀 ~ file: views.py:154 ~ serializer_class", serializer_class)
+        return Response(serializer_class.data)
+            
+
+
+
+
+
+
 '''Crud operation with serializer by subhash sir'''
 class CrudoperationAPIView(APIView): 
     def get(self, request):

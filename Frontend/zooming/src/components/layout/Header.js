@@ -39,7 +39,6 @@ const Header = ({
     logoutUser();
   };
 
-
   const [isActive, setIsactive] = useState(false);
   const nav = useRef(null);
   const hamburger = useRef(null);
@@ -128,7 +127,7 @@ const Header = ({
                       <Link to="#solutions" onClick={closeMenu}>Solutions</Link>
                     </li>
                     <li>
-                      <Link to="#resource" onClick={closeMenu}>Resources</Link>
+                      <Link to="/ListMeeting" onClick={openMenu}>Meetings</Link>
                     </li>
                     <li>
                       <Link to="/Plans" onClick={openMenu}>Plans & Pricing</Link>

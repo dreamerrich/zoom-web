@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Header from '../layout/Header';
@@ -72,13 +72,7 @@ const propTypes = {
     const clickOutside = (e) => {
         if (!nav.current) return
         closeMenu();
-    }  
-      
-    // const classes = classNames(
-    //     'site-header',
-    //     bottomOuterDivider && 'has-bottom-divider',
-    //     className
-    // );
+    }
 
     const innerClasses = classNames(
       'testimonial-inner section-inner',
@@ -86,6 +80,16 @@ const propTypes = {
       bottomDivider && 'has-bottom-divider'
     );
 
+    const [data, setData] = useState;
+
+    useEffect(() => {
+        fetch("http://127.0.0.1:8000/meeting")
+        .then((res) => res.json())
+        .then((json) => {
+                setData(json);
+        });
+    })
+    
     return (
         <section
             {...props}
@@ -117,10 +121,10 @@ const propTypes = {
                                                 navPosition && `header-nav-${navPosition}`
                                             )}>
                                                 <li>
-                                                    <Link to="/Product" onClick={openMenu}>Upcoming</Link>
+                                                    <Link to="#" onClick={openMenu}>Upcoming</Link>
                                                 </li>
                                                 <li>
-                                                    <Link to="#solutions" onClick={closeMenu}>Previous</Link>
+                                                    <Link to="#" onClick={openMenu}>Previous</Link>
                                                 </li>
                                             </ul>
                                         </div>
@@ -131,24 +135,18 @@ const propTypes = {
                         <div className='row-filter'>
                             <h3>filter</h3>
                             <div className='meeting-list'>
+                            {data.map((datas) => (
                                 <div className='meeting-detail'>
                                     <div className='time'>
-                                        <p>Time</p>
-                                    </div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                        <p> { datas.start_time } </p>
+                                    </div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                     <div className='topic-id'>
-                                        <p>topic</p>
-                                        <p>id</p>
+                                        <p>{ datas.topic } </p>,
+                                        <p>{ datas.meeting_id} </p>
                                     </div>
                                 </div>
-                                <div className='meeting-detail'>
-                                    <div className='time'>
-                                        <p>Time</p>
-                                    </div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                    <div className='topic-id'>
-                                        <p>topic</p>
-                                        <p>id</p>
-                                    </div>
-                                </div>
+                                ))
+                            }
                             </div>
                         </div>
                     </div>

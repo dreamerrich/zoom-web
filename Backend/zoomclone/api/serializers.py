@@ -56,7 +56,7 @@ class LoginSerializer(serializers.Serializer):
 class MeetingSerializer(serializers.ModelSerializer):
   class Meta:
     model = CreateMeeting
-    fields = '__all__'
+    fields = ('id', 'topic', 'start_time', 'duration','url','meeting_id','passcode')
 
 '''crud operation with serializer by subhash sir'''
 

@@ -5,6 +5,7 @@ import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import Avtar from './Avtar';
 
+
 const propTypes = {
     ...SectionTilesProps.types
   }
@@ -40,6 +41,7 @@ const propTypes = {
       bottomDivider && 'has-bottom-divider'
     );
 
+    // const User = localStorage.setItem("username")
     return (
         <section
             {...props}
@@ -53,7 +55,7 @@ const propTypes = {
                             <Avtar />
                         </div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <div>
-                            <h6>User Name</h6>
+                            <h6>UserName</h6>
                             <p>name</p>
                         </div>
                     </div>

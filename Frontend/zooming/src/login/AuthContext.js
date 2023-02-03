@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
       alert("login Successfully");
-      history.push("/");
+      history.push("/Dashboard");
     } else {
       alert("Something went wrong!");
     }
@@ -99,6 +99,23 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const ListMeetings = async () => {
+    const response =  await fetch("http://127.0.0.1:8000/meeting", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+     
+    });
+    if (response.status === 200) {
+      alert("Successfully Created Meeting")
+      history.push("/");
+    } else {
+      console.log(">>>>>>>>>>error")
+      alert("Something went wrong!");
+    }
+  }
+
   const contextData = {
     user,
     setUser,
@@ -107,7 +124,8 @@ export const AuthProvider = ({ children }) => {
     registerUser,
     loginUser,
     logoutUser,
-    CreateMeeting
+    CreateMeeting,
+    ListMeetings
   };
 
   useEffect(() => {

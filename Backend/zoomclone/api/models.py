@@ -57,6 +57,7 @@ class CreateMeeting(models.Model):
     id = models.AutoField(primary_key=True)
     topic = models.CharField(max_length=255, null=True)
     start_time = models.DateTimeField(null=True)
+    # End_time = models.TimeField(null=True)
     duration = models.IntegerField(null=True)
     url = models.CharField(max_length=255, null=True, editable=False)
     meeting_id = models.CharField(max_length=255, null=True, editable=False)
