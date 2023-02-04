@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
     history.push("/");
   };
 
-  const CreateMeeting = async (topic, date, duration) => {
+  const CreateMeeting = async (topic, date, duration, timezone) => {
     const response = await fetch("http://127.0.0.1:8000/createmeet", {
       method: "POST",
       headers: {
@@ -88,6 +88,7 @@ export const AuthProvider = ({ children }) => {
         topic,
         date,
         duration,
+        timezone,
       })
     });
     if (response.status === 200) {

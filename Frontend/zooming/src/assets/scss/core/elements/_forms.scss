@@ -546,3 +546,35 @@ textarea.form-input {
 		}
     }
 }
+
+select {
+	display: block;
+	@include font-size(input);
+	@include font-weight(input);
+	padding: (($button-form--height - get-line-height(input) - ($button-form--border-width * 2)) * 0.5) ($form--padding-h - $button-form--border-width);
+	height: $button-form--height;
+	border-radius: $form--radius;
+    color: grey;
+	background-color: white;
+	box-shadow: none;
+    max-width: 100%;
+    width: 100%;
+    border-radius: 10px;
+	border-color: color-border(input-inverse);
+}
+
+.topic {
+	display: flex;
+}
+
+.when {
+	display: flex;
+}
+
+.duration {
+	display: flex;
+}
+
+.timezone {
+	display: flex;
+}

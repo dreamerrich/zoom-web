@@ -6,6 +6,7 @@ import { SectionTilesProps } from '../../utils/SectionProps';
 import Button from '../elements/Button';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
+import timezone from '../../data/timezones.json'
 
 
 const propTypes = {
@@ -47,26 +48,23 @@ const propTypes = {
     const [topic, setTopic] = useState("");
    
     const [start_time, setDate] = useState("");
+
+    const [zone, setZone] = useState("")
    
     const [duration, setDuration] = useState("");
+
+    const [time, setTime] = useState("");
     
     const { CreateMeeting } = useContext(AuthContext);
     const token = localStorage.getItem("authTokens");
 
     const handleSubmit = async e => {
       e.preventDefault();
-      CreateMeeting( topic, start_time, duration );
+      CreateMeeting( topic, start_time, duration, time, zone );
     };
 
-    // const [tz, setTz] = useState(
-    //     Intl.DateTimeFormat().resolvedOptions().timeZone
-    // );
-    // const [datetime, setDatetime] = useState(spacetime.now());
-
-    // useMemo(() => {
-    //     const tzValue = tz.value ?? tz;
-    //     setDatetime(datetime.goto(tzValue));
-    //     }, [tz]);
+    
+    
     return (
         <section
             {...props}
@@ -81,53 +79,89 @@ const propTypes = {
         <div className='meetingForm'>
         <Form style={{textAlign:"left"}} onSubmit={handleSubmit}>
             <FormGroup>
-                <div>
-                <Label>Topic</Label>
-                <Input
-                    type="text"
-                    name="topic"
-                    id="topic"
-                    placeholder='topic'
-                    onChange={e => setTopic(e.target.value)}
-                    required
-                />&nbsp;
+
+                <div className='topic'>
+                  <Label>Topic</Label> &nbsp; &nbsp; &nbsp;
+                  <Input
+                      type="text"
+                      name="topic"
+                      id="topic"
+                      placeholder='topic'
+                      onChange={e => setTopic(e.target.value)}
+                      required
+                  />&nbsp;
+                </div><br />
+
+                <div className='when'>
+                  <Label>When</Label> &nbsp; &nbsp; &nbsp;
+                  <Input
+                      type="date"
+                      name="start_time"
+                      id="start_time"
+                      placeholder='date'
+                      onChange={e => setDate(e.target.value)}
+                      required
+                  />&nbsp;
+                  <Input
+                      type="time"
+                      name="time"
+                      id="time"
+                      placeholder='date'
+                      onChange={e => setTime(e.target.value)}
+                      required
+                  />&nbsp; &nbsp;<br />
+                      <select>
+                          <option value="AM">AM</option>
+                          <option value="PM">PM</option>
+                      </select>
+                </div> <br />
+                &nbsp; &nbsp;
+
+                <div className='duration'>
+                    <Label>Duration</Label> &nbsp; &nbsp; &nbsp;
+                    <select
+                            type="hour"
+                            name="time"
+                            id="time"
+                            placeholder='duration'
+                            onChange={e => setDuration(e.target.value)}
+                            required
+                    >&nbsp; &nbsp;
+                    <option value='1'>1 hr</option>
+                    <option value='2'>2 hr</option> 
+                    </select> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <select
+                            type="min"
+                            name="time"
+                            id="time"
+                            placeholder='duration'
+                            onChange={e => setDuration(e.target.value)}
+                            required
+                    >&nbsp; &nbsp;
+                    <option value='20'>20 min</option>
+                    <option value='30'>30 min</option>
+                    <option value='60'>60 min</option>
+                    </select> &nbsp; &nbsp;
                 </div>
-                <div>
-                <Label>When</Label>
-                
-                <Input
-                    type="date"
-                    name="start_time"
-                    id="start_time"
-                    placeholder='date'
-                    onChange={e => setDate(e.target.value)}
-                    required
-                />&nbsp;
-                <Input
-                    type="time"
-                    name="start_time"
-                    id="start_time"
-                    placeholder='date'
-                    onChange={e => setDate(e.target.value)}
-                    required
-                />&nbsp; &nbsp;<br />
-                    <select>
-                        <option value="AM">AM</option>
-                        <option value="PM">PM</option>
+                <br />
+
+                <div className='timezone'> 
+                    <Label>TimeZone</Label>&nbsp; &nbsp; &nbsp;
+                    <select
+                    className='select'
+                      type='timezone'
+                      name='zone'
+                      id='zone'
+                      placeholder='timezone'
+                      onChange={e => setZone(e.target.value)}
+                      required
+                    >&nbsp; &nbsp;
+                    {timezone.map((timezones) => (
+                      <option value={timezones.text}>{timezones.text}</option>
+                    ))
+                    }
                     </select>
                 </div>
-                &nbsp;
-                <Label>Duration</Label>
-                <Input
-                        type="minutes"
-                        name="time"
-                        id="time"
-                        placeholder='duration'
-                        onChange={e => setDuration(e.target.value)}
-                        required
-                />&nbsp;  
-                <Label>TimeZone</Label>
-                
                 <br />
                 <Button type='submit'>Save</Button>&nbsp;&nbsp;&nbsp;
                 <Button type='submit'>Cancel</Button>
@@ -142,9 +176,11 @@ const propTypes = {
       </div> 
     <Footer/>
     </section>
-    )
-    
+  )
+
 }
+
+    
 CreateMeeting.propTypes = propTypes;
 CreateMeeting.defaultProps = defaultProps;
 

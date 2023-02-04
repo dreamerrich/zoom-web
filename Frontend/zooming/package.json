@@ -18,7 +18,8 @@
     "react-timezone-select": "^1.4.0",
     "reactstrap": "^9.1.5",
     "sass": "^1.49.7",
-    "spacetime": "^7.4.1"
+    "spacetime": "^7.4.1",
+    "timezones.json": "^1.6.1"
   },
   "repository": {
     "type": "git",

@@ -79,16 +79,6 @@ const propTypes = {
       topDivider && 'has-top-divider',
       bottomDivider && 'has-bottom-divider'
     );
-
-    const [data, setData] = useState;
-
-    useEffect(() => {
-        fetch("http://127.0.0.1:8000/meeting")
-        .then((res) => res.json())
-        .then((json) => {
-                setData(json);
-        });
-    })
     
     return (
         <section
@@ -135,18 +125,15 @@ const propTypes = {
                         <div className='row-filter'>
                             <h3>filter</h3>
                             <div className='meeting-list'>
-                            {data.map((datas) => (
                                 <div className='meeting-detail'>
                                     <div className='time'>
-                                        <p> { datas.start_time } </p>
+                                        <p> time </p>
                                     </div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                     <div className='topic-id'>
-                                        <p>{ datas.topic } </p>,
-                                        <p>{ datas.meeting_id} </p>
+                                        <p> topic </p>,
+                                        <p> meeting_id </p>
                                     </div>
                                 </div>
-                                ))
-                            }
                             </div>
                         </div>
                     </div>

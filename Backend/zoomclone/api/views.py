@@ -69,7 +69,7 @@ class LoginView(APIView):
             
             if user is not None:
                 payload = JWT_PAYLOAD_HANDLER(user)
-                jwt_token = JWT_ENCODE_HANDLER(payload)
+                # jwt_token = JWT_ENCODE_HANDLER(payload)
                 jwt_access_token_lifetime =  settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                 jwt_refresh_token_lifetime =  settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
                 update_last_login(None, user)
@@ -107,7 +107,7 @@ class ZoomMeetings(APIView):
             serializer_class = MeetingSerializer(data=request.data)
             date = datetime.datetime.now()
             url = 'https://api.zoom.us/v2/users/'+self.email+'/meetings'
-            jsonObj = {"topic":request.data['topic'], "start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ'),"duration":request.data['duration']}
+            jsonObj = {"topic":request.data['topic'], "start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ'), "timezone":request.data['timezone'], "duration":request.data['duration']}
             header = {'authorization': 'Bearer '+self.request_token}
             zoom_create_meeting = requests.post(url,json=jsonObj, headers=header)
             meet_detail = zoom_create_meeting.text
@@ -116,6 +116,7 @@ class ZoomMeetings(APIView):
                  serializer_class.save(
                      topic=request.data['topic'],
                      start_time=request.data['start_time'],
+                     timezone = request.data['timezone'],
                      duration=request.data['duration'],
                      url=detail['join_url'],
                      meeting_id=detail['id'],
@@ -131,7 +132,8 @@ class ZoomMeetings(APIView):
                     fail_silently=False) 
             return Response(serializer_class.data)
     
-    def put():
+    def put(self, meeting_id):
+        url = 'https://api.zoom.us/v2/meetings'+str(meeting_id)
         return Response()
 
     def get(self,meeting_id):
