@@ -12,6 +12,7 @@
     "react-axios": "^2.0.6",
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
+    "react-paginate": "^8.1.4",
     "react-router-dom": "^5.1.2",
     "react-scripts": "5.0.1",
     "react-simple-oauth2-login": "^0.5.4",

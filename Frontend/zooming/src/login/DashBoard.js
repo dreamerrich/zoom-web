@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { SectionTilesProps } from '../utils/SectionProps';
 import Header from '../components/layout/Header';
@@ -40,8 +40,25 @@ const propTypes = {
       topDivider && 'has-top-divider',
       bottomDivider && 'has-bottom-divider'
     );
+    
+    const [user, setUser] = useState([])
+    // const token = localStorage.getItem("authTokens")
 
-    // const User = localStorage.setItem("username")
+    const fetchData = () => {
+        fetch('http://127.0.0.1:8000/profile')
+        .then(Response => {
+            return Response.json()
+        })
+        .then(data => {
+                setUser(data[0].username)
+                console.log("user data",data)
+        })
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
     return (
         <section
             {...props}
@@ -49,14 +66,15 @@ const propTypes = {
         >
             <Header />
             <div className="container">
+            
                 <div className={innerClasses}>
                     <div className='profile'>
                         <div>
                             <Avtar />
                         </div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <div>
-                            <h6>UserName</h6>
-                            <p>name</p>
+                             <h6>{user}</h6>
+                             <p>{user}</p>
                         </div>
                     </div>
                     <div className='personal'>
@@ -67,48 +85,48 @@ const propTypes = {
                         </div>
                         <div className='meetingDetail'>
                             <p>Language</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>Not setted</p>
+                            <p>English</p>
                         </div>
                         <div className='meetingDetail'>
                             <p>time zone</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>Not setted</p>
+                            <p>UTC+05:30</p>
                         </div>
                         <div className='meetingDetail'>
                             <p>Date format</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>Not setted</p>
+                            <p>DD/MM/YY</p>
                         </div>
                         <div className='meetingDetail'>
                             <p>time format</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>Not setted</p>
+                            <p>HH:MM</p>
                         </div>
                     </div>
                     <div className='meeting'>
                         <h6>Meeting</h6>
                         <div className='meetingDetail'>
                             <p>Personal Meeting ID</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>Not setted</p>
+                            <p>74056984523</p>
                         </div>
                         <div className='meetingDetail'>
                             <p>Host Key</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>Not setted</p>
+                            <p>365748</p>
                         </div>
                     </div>
                     <div className='signin'>
                         <h6>Sign In</h6>
                         <div className='meetingDetail'>
                             <p>Mail ID</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>Not setted</p>
+                            <p>{user.email}</p>
                         </div>
                         <div className='meetingDetail'>
                             <p>Password</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>Not setted</p>
+                            <p>.....</p>
                         </div>
                     </div>
-                </div>
+                    </div>  
             </div>
-            <Footer/>
-        </section>
-    )
+        <Footer/>
+    </section>
+)
         
 };
 

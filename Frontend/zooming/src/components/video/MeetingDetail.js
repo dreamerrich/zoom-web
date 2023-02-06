@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import classNames from 'classnames';
 import { SectionTilesProps } from '../../utils/SectionProps';
 import Button from '../elements/Button';
@@ -40,6 +40,26 @@ const propTypes = {
       bottomDivider && 'has-bottom-divider'
     );
 
+    const [meetinglink, setMeetingLink] = useState({})
+
+    const fetchData = () => {
+        fetch('http://127.0.0.1:8000/meetlink')
+        .then(Response => {
+            return Response.json()
+        })
+        .then(data => {
+                setMeetingLink(data)
+                console.log(".....",data)
+            })
+        }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    
+    
+
     return (
         <section
             {...props}
@@ -58,17 +78,18 @@ const propTypes = {
                                 <h6>Security</h6>
                                 <h6>Invite Link</h6>
                             </div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                           
                             <div className='row-data'>
-                                <h6>metting topic</h6> 
-                                <h6>meeting time</h6>
-                                <h6>meeting id</h6>
-                                <h6>passcode</h6>
-                                <h6>link</h6> 
+                                <h6>{meetinglink.topic}</h6> 
+                                <h6>{meetinglink.start_time}</h6>
+                                <h6>{meetinglink.meeting_id}</h6>
+                                <h6>{meetinglink.passcode}</h6>
+                                <h6>{meetinglink.url}</h6> 
                             </div>  
+                           
                         </div>
                         <div>
-                            <Button type="submit">Start</Button> &nbsp;&nbsp;&nbsp;
-                            <Button>Copy Invite</Button>
+                            <Button onClick={() => navigator.clipboard.writeText(meetinglink.meeting_id + "\n" + meetinglink.passcode + "\n" + meetinglink.url)}>Copy Invite</Button>
                         </div>
                     </div>
                 </div>

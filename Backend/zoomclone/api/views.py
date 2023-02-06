@@ -132,9 +132,18 @@ class ZoomMeetings(APIView):
                     fail_silently=False) 
             return Response(serializer_class.data)
     
-    def put(self, meeting_id):
+    def put(self, request, meeting_id):
+        data = CreateMeeting.objects.get(id=meeting_id)
         url = 'https://api.zoom.us/v2/meetings'+str(meeting_id)
-        return Response()
+        header = {'authorization': 'Bearer '+self.request_token}
+        get_zoom_meeting = requests.get(url, headers=header)
+        serializer_class = MeetingSerializer(meeting_id, data=request.data, partial=True)
+        if data == None:
+            return Response("No data")
+        if serializer_class.is_valid():
+            serializer_class.save()
+            return Response(serializer_class.data)
+        return Response(serializer_class.data)
 
     def get(self,meeting_id):
         url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
@@ -150,48 +159,13 @@ class MeetingList(APIView):
         return Response(serializer_class.data)
             
 
+    def meet_filter(self, request):
+        data = CreateMeeting.objects.all()
+        serializer_class = MeetingSerializer
+        filter = ['month']
 
-
-
-
-
-'''Crud operation with serializer by subhash sir'''
-class CrudoperationAPIView(APIView): 
+class MeetingLink(APIView):
     def get(self, request):
-        queryset = Detail.objects.all()
-        serializers_class = detailSerializer(queryset, many=True)
-        return Response(serializers_class.data)
-    
-    def post(self, request):
-        serializer_class = detailSerializer(data=request.data)
-        if serializer_class.is_valid():
-            serializer_class.save()
-            return Response(serializer_class.data)
-        return Response(serializer_class.errors)
-    
-    def patch(self, request, pk, format=None):
-        data_id = Detail.objects.get(id=pk)
-        print("🚀 ~ file: views.py:163 ~ pk", data_id)
-        serializer_class = detailSerializer(data_id, data=request.data)
-        if data_id == None:
-            return Response("No data")
-        if serializer_class.is_valid():
-            serializer_class.save()
-            return Response(serializer_class.data)
-        return Response("Invalid updates")
-    
-    def put(self, request, pk, format=None):
-        data_id = Detail.objects.get(id=pk)
-        print("🚀 ~ file: views.py:163 ~ pk", data_id)
-        serializer_class = detailSerializer(data_id, data=request.data, partial=True)
-        if data_id == None:
-            return Response("No data")
-        if serializer_class.is_valid():
-            serializer_class.save()
-            return Response(serializer_class.data)
-        return Response("Invalid updates")
-    
-    def delete(self, request, pk):
-        data_delete = Detail.objects.get(id=pk)
-        data_delete.delete()
-        return Response("Data deleted")
+        queryset = CreateMeeting.objects.latest('start_time')
+        serializer_class = MeetingSerializer(queryset)
+        return Response(serializer_class.data)

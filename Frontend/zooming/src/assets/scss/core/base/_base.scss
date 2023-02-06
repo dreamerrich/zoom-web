@@ -87,24 +87,25 @@ figcaption {
 
 // tables
 table {
-	@include font-size(table);
-	border-collapse: collapse;
+	@include font-size(table);	
 	margin-bottom: $spacing--shared-v;
 	width: 100%;
 }
 
 tr {
-	border-bottom: 1px solid color-border(divider);
+	border-bottom: none;
 }
 
 th {
 	@include font-weight(strong);
 	text-align: left;
+	color: black;
 }
 
 th,
 td {
 	padding: $spacing--table-cell-v $spacing--table-cell-h;
+	border: none;
 
 	&:first-child {
 		padding-left: 0;
@@ -115,14 +116,14 @@ td {
 	}
 }
 
+td {
+	color: grey;
+}
+
 .invert-color  {
 
-	hr {
-		@include divider(false, inverse);
-	}
-
 	tr {
-		border-bottom: 1px solid color-border(divider-inverse);
+		border-bottom: none;
 	}
 }
 
@@ -137,3 +138,4 @@ td {
 .profile {
 	display: flex;
 }
+

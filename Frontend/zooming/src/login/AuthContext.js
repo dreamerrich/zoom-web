@@ -92,11 +92,10 @@ export const AuthProvider = ({ children }) => {
       })
     });
     if (response.status === 200) {
-      alert("Successfully Created Meeting")
+      // alert("Successfully Created Meeting")
       history.push("/MeetingDetail");
     } else {
-      console.log(">>>>>>>>>>error")
-      alert("Something went wrong!");
+      // alert("Something went wrong!");
     }
   }
 
@@ -112,7 +111,6 @@ export const AuthProvider = ({ children }) => {
       alert("Successfully Created Meeting")
       history.push("/");
     } else {
-      console.log(">>>>>>>>>>error")
       alert("Something went wrong!");
     }
   }

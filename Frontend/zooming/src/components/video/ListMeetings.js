@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import { Link } from 'react-router-dom';
+import { Table } from 'reactstrap';
 
 const propTypes = {
     navPosition: PropTypes.string,
@@ -79,6 +80,24 @@ const propTypes = {
       topDivider && 'has-top-divider',
       bottomDivider && 'has-bottom-divider'
     );
+
+    const [meeting, setMeeting] = useState([])
+
+    const fetchData = () => {
+        fetch('http://127.0.0.1:8000/meeting')
+        .then(Response => {
+            return Response.json()
+        })
+        .then(data => {
+                setMeeting(data)
+            })
+        }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    const token = localStorage.getItem("authTokens");
     
     return (
         <section
@@ -122,22 +141,34 @@ const propTypes = {
                                 </div>
                             </div>
                             <hr />
-                        <div className='row-filter'>
                             <h3>filter</h3>
-                            <div className='meeting-list'>
-                                <div className='meeting-detail'>
-                                    <div className='time'>
-                                        <p> time </p>
-                                    </div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                    <div className='topic-id'>
-                                        <p> topic </p>,
-                                        <p> meeting_id </p>
-                                    </div>
-                                </div>
-                            </div>
+                            {token ?
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th>start_time</th>
+                                        <th>topic</th>
+                                        <th>meeting_id</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {meeting.map((i)=> {return (
+                                    <tr>
+                                        <td>{i.start_time}</td>
+                                        <td>{i.topic}</td>
+                                        <td>{i.meeting_id}</td>
+                                    </tr>
+                                )})}
+                                </tbody>
+                            </Table> :
+                            <div>
+                            <h6>Please Login to view Your past meeting.</h6>
                         </div>
+                    }
+                    <div></div>
+                    <div></div>
                     </div>
-                </div>
+                </div> 
             <Footer/>
         </section>
     )

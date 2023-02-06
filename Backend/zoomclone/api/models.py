@@ -66,14 +66,3 @@ class CreateMeeting(models.Model):
     url = models.CharField(max_length=255, null=True, editable=False)
     meeting_id = models.CharField(max_length=255, null=True, editable=False)
     passcode = models.CharField(max_length=255, null=True, editable=False)
-
-'''crud operation with serializer by subhash sir'''
-
-class Detail(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
-    number = models.CharField(max_length=10)
-    description = models.CharField(max_length=255)
-    
-    def __int__(self):  
-        return self.pk
