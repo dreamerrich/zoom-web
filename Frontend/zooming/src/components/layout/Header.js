@@ -136,7 +136,7 @@ const Header = ({
                     <Link to="/CreateMeeting" onClick={openMenu}>Create Meeting</Link>
                     </li>
                     <li>
-                      <Link to={`https://zoom.us/join`} onClick={closeMenu}>Join</Link>
+                    <a href="https://zoom.us/join">Join</a>
                     </li>
                     <li>
                       

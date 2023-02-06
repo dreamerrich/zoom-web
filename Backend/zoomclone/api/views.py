@@ -115,7 +115,7 @@ class ZoomMeetings(APIView):
             if serializer_class.is_valid():
                  serializer_class.save(
                      topic=request.data['topic'],
-                     start_time=request.data['start_time'],
+                     start_time=request.data['start_date'],
                      timezone = request.data['timezone'],
                      duration=request.data['duration'],
                      url=detail['join_url'],
@@ -155,14 +155,13 @@ class MeetingList(APIView):
     def get(self, request):
         queryset = CreateMeeting.objects.all()
         serializer_class = MeetingSerializer(queryset, many=True)
-        print("🚀 ~ file: views.py:154 ~ serializer_class", serializer_class)
         return Response(serializer_class.data)
             
 
     def meet_filter(self, request):
         data = CreateMeeting.objects.all()
         serializer_class = MeetingSerializer
-        filter = ['month']
+        filter = ['date']
 
 class MeetingLink(APIView):
     def get(self, request):

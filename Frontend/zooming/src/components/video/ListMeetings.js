@@ -5,6 +5,8 @@ import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import { Link } from 'react-router-dom';
 import { Table } from 'reactstrap';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const propTypes = {
     navPosition: PropTypes.string,
@@ -98,6 +100,13 @@ const propTypes = {
     }, [])
 
     const token = localStorage.getItem("authTokens");
+
+    const now = new Date();
+    const min = now;
+    const max = new Date(now.getFullYear(), now.getMonth() + 6, now.getDate());
+    const [date, setDate] = useState(false)
+
+    
     
     return (
         <section
@@ -132,6 +141,7 @@ const propTypes = {
                                                 <li>
                                                     <Link to="#" onClick={openMenu}>Upcoming</Link>
                                                 </li>
+                                                
                                                 <li>
                                                     <Link to="#" onClick={openMenu}>Previous</Link>
                                                 </li>
@@ -141,22 +151,26 @@ const propTypes = {
                                 </div>
                             </div>
                             <hr />
-                            <h3>filter</h3>
+                            <DatePicker
+                                controls={['calendar']}
+                                select="range"
+                                min={min}
+                                
+                            />
                             {token ?
                             <Table>
                                 <thead>
                                     <tr>
-                                        <th>start_time</th>
-                                        <th>topic</th>
-                                        <th>meeting_id</th>
+                                        <th><h4> </h4></th>
+                                        <th><h4> </h4></th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
                                 {meeting.map((i)=> {return (
                                     <tr>
-                                        <td>{i.start_time}</td>
-                                        <td>{i.topic}</td>
-                                        <td>{i.meeting_id}</td>
+                                        <td><h6>{i.start_time}</h6></td>
+                                        <td><h6>{i.topic}</h6><br/>{i.meeting_id}</td>
                                     </tr>
                                 )})}
                                 </tbody>

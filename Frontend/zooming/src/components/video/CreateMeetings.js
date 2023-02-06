@@ -6,7 +6,7 @@ import { SectionTilesProps } from '../../utils/SectionProps';
 import Button from '../elements/Button';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
-import timezone from '../../data/timezones.json'
+import timezones from '../../data/timezones.json'
 
 
 const propTypes = {
@@ -49,18 +49,16 @@ const propTypes = {
    
     const [start_time, setDate] = useState("");
 
-    const [zone, setZone] = useState("")
+    const [timezone, setTimeZone] = useState("");
    
     const [duration, setDuration] = useState("");
-
-    const [time, setTime] = useState("");
     
     const { CreateMeeting } = useContext(AuthContext);
     const token = localStorage.getItem("authTokens");
 
     const handleSubmit = async e => {
       e.preventDefault();
-      CreateMeeting( topic, start_time, duration, time, zone );
+      CreateMeeting( topic, start_time, duration, timezone );
     };
 
     
@@ -95,21 +93,13 @@ const propTypes = {
                 <div className='when'>
                   <Label>When</Label> &nbsp; &nbsp; &nbsp;
                   <Input
-                      type="date"
+                      type="datetime-local"
                       name="start_time"
                       id="start_time"
                       placeholder='date'
                       onChange={e => setDate(e.target.value)}
                       required
                   />&nbsp;
-                  <Input
-                      type="time"
-                      name="time"
-                      id="time"
-                      placeholder='date'
-                      onChange={e => setTime(e.target.value)}
-                      required
-                  />&nbsp; &nbsp;<br />
                       <select>
                           <option value="AM">AM</option>
                           <option value="PM">PM</option>
@@ -150,14 +140,14 @@ const propTypes = {
                     <select
                     className='select'
                       type='timezone'
-                      name='zone'
-                      id='zone'
+                      name='timezone'
+                      id='timezone'
                       placeholder='timezone'
-                      onChange={e => setZone(e.target.value)}
+                      onChange={e => setTimeZone(e.target.value)}
                       required
                     >&nbsp; &nbsp;
-                    {timezone.map((timezones) => (
-                      <option value={timezones.text}>{timezones.text}</option>
+                    {timezones.map((timezone) => (
+                      <option value={timezone.text}>{timezone.text}</option>
                     ))
                     }
                     </select>

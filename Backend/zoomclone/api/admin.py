@@ -7,6 +7,3 @@ class CreateMeetAdmin(admin.ModelAdmin):
     list_display = ('id','topic','start_time','duration')
 admin.site.register(CreateMeeting, CreateMeetAdmin)
 
-'''crud operation with serializer by subhash sir'''
-
-admin.site.register(Detail)

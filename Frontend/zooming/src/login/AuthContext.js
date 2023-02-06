@@ -78,17 +78,17 @@ export const AuthProvider = ({ children }) => {
     history.push("/");
   };
 
-  const CreateMeeting = async (topic, date, duration, timezone) => {
+  const CreateMeeting = async (topic, start_time, duration, timezone) => {
     const response = await fetch("http://127.0.0.1:8000/createmeet", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        topic,
-        date,
-        duration,
+        topic, 
+        start_time,  
         timezone,
+        duration, 
       })
     });
     if (response.status === 200) {
