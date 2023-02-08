@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
-import { Link } from 'react-router-dom';
-import { Table } from 'reactstrap';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { Button, Table } from 'reactstrap';
+
 
 const propTypes = {
     navPosition: PropTypes.string,
@@ -84,9 +82,15 @@ const propTypes = {
     );
 
     const [meeting, setMeeting] = useState([])
-
+    const token = localStorage.getItem("authTokens");
+    const accessToken = JSON.parse(token);
+    
     const fetchData = () => {
-        fetch('http://127.0.0.1:8000/meeting')
+        fetch('http://127.0.0.1:8000/meeting',{ 
+            headers: new Headers({
+            'Authorization': 'Bearer ' + accessToken.access, 
+            'Content-Type': 'application/x-www-form-urlencoded'
+        })},)
         .then(Response => {
             return Response.json()
         })
@@ -97,17 +101,13 @@ const propTypes = {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    })
 
-    const token = localStorage.getItem("authTokens");
+    const dataid = (e) => {
+        console.log('e----------------',e);
+        
+    }
 
-    const now = new Date();
-    const min = now;
-    const max = new Date(now.getFullYear(), now.getMonth() + 6, now.getDate());
-    const [date, setDate] = useState(false)
-
-    
-    
     return (
         <section
             {...props}
@@ -119,50 +119,14 @@ const propTypes = {
                         <div>
                             <h3>Meetings</h3>
                         </div>
-                        <div className='nav'>
-                                <div className={
-                                    classNames(
-                                    'site-header-inner',
-                                    bottomDivider && 'has-bottom-divider'
-                                )}>
-                                    <nav
-                                        ref={nav}
-                                        className={
-                                        classNames(
-                                        'header-nav',
-                                        isActive && 'is-active'
-                                    )}>
-                                        <div className="header-nav-inner">
-                                            <ul className={
-                                                classNames(
-                                                'list-reset text-xs',
-                                                navPosition && `header-nav-${navPosition}`
-                                            )}>
-                                                <li>
-                                                    <Link to="#" onClick={openMenu}>Upcoming</Link>
-                                                </li>
-                                                
-                                                <li>
-                                                    <Link to="#" onClick={openMenu}>Previous</Link>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </nav> 
-                                </div>
-                            </div>
                             <hr />
-                            <DatePicker
-                                controls={['calendar']}
-                                select="range"
-                                min={min}
-                                
-                            />
+                           
                             {token ?
                             <Table>
                                 <thead>
                                     <tr>
-                                        <th><h4> </h4></th>
-                                        <th><h4> </h4></th>
+                                        <th><h4>Start time</h4></th>
+                                        <th><h4>Topic</h4></th>
                                         
                                     </tr>
                                 </thead>
@@ -171,8 +135,11 @@ const propTypes = {
                                     <tr>
                                         <td><h6>{i.start_time}</h6></td>
                                         <td><h6>{i.topic}</h6><br/>{i.meeting_id}</td>
+                                        <td><Button onClick={()=>dataid(i.meeting_id)}>Edit</Button></td>
                                     </tr>
-                                )})}
+                                    )})}
+                                    <tr>
+                                    </tr>
                                 </tbody>
                             </Table> :
                             <div>

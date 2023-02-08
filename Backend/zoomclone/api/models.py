@@ -57,6 +57,7 @@ class CustomUser(AbstractBaseUser):
         return self.is_admin
 
 class CreateMeeting(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     id = models.AutoField(primary_key=True)
     topic = models.CharField(max_length=255, null=True)
     start_time = models.DateTimeField(null=True)
@@ -65,3 +66,6 @@ class CreateMeeting(models.Model):
     url = models.CharField(max_length=255, null=True, editable=False)
     meeting_id = models.CharField(max_length=255, null=True, editable=False)
     passcode = models.CharField(max_length=255, null=True, editable=False)
+
+    def __str__(self):
+        return self.meeting_id

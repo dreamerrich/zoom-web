@@ -43,9 +43,11 @@ class RegisterApiView(APIView):
 # ------------- User get api -----------------
 class Profile(APIView):
     def get(self, request):
-        data = User.objects.all()
-        serializer = RegisterSerializer(data, many=True)
-        return Response(serializer.data)
+        current_user = request.user
+        if request.user.is_authenticated:
+            serializer = RegisterSerializer(current_user)
+            return Response(serializer.data)
+        return Response("No user Found")
 
 # ------------- login view -----------------
 class LoginView(APIView):
@@ -85,12 +87,19 @@ class LoginView(APIView):
                 return Response(response, status=status_code)
             else:
                 return Response({"error": 'Your password is not correct please try again or reset your password'}, status=401)
+            
+    def get(self, request):
+        current_user = request.user
+        if request.user.is_authenticated:
+            serializer = RegisterSerializer(current_user)
+            return Response(serializer.data)
+        return Response("No user Found")
 
 #------------------------- create meeting ---------------------------
 
 class ZoomMeetings(APIView):
     serializer_class = MeetingSerializer
-    
+    permission_classes = [IsAuthenticated, ]
     def __init__(self,email='richidhimar45@gmail.com',api_key=settings.API_KEY,secret_key=settings.SECRET_KEY):
         self.time_now = datetime.datetime.now()
         self.expiration_time = self.time_now+datetime.timedelta(minutes=40)
@@ -112,56 +121,74 @@ class ZoomMeetings(APIView):
             zoom_create_meeting = requests.post(url,json=jsonObj, headers=header)
             meet_detail = zoom_create_meeting.text
             detail = json.loads(meet_detail)
-            if serializer_class.is_valid():
-                 serializer_class.save(
-                     topic=request.data['topic'],
-                     start_time=request.data['start_date'],
-                     timezone = request.data['timezone'],
-                     duration=request.data['duration'],
-                     url=detail['join_url'],
-                     meeting_id=detail['id'],
-                     passcode=detail['password']
-                 )
-                 m_url = detail['join_url']
-                 m_id = detail['id']
-                 m_passcode = detail['password']
-                 send_mail(subject = 'Zoom Meeting Link',
-                    message = f'Hey there here is your zoom meeting LINK : {m_url} your meeting ID : {m_id} and PASSWORD : {m_passcode}',
-                    from_email = settings.EMAIL_HOST_USER,
-                    recipient_list = ['richidhimar45@gmail.com'],
-                    fail_silently=False) 
-            return Response(serializer_class.data)
+            # print("========data", request.data)
+            # print(">>>>>>users", User.objects.filter("username").first())
+            user = request.user
+            print("🚀 ~ file: views.py:127 ~ user", user)
+            if serializer_class.is_valid(raise_exception=True):
+                serializer_class.save(
+                    topic=request.data['topic'],
+                    start_time=request.data['start_time'],
+                    timezone = request.data['timezone'],
+                    duration=request.data['duration'],
+                    url=detail['join_url'],
+                    meeting_id=detail['id'],
+                    passcode=detail['password'],
+                    user = request.user
+                )
+                print("🚀 ~ file: views.py:138 ~ user", user)
+                return Response(serializer_class.data)
+                # print("",serializer_class)
+                #  m_url = detail['join_url']
+                #  m_id = detail['id']
+                #  m_passcode = detail['password']
+                #  send_mail(subject = 'Zoom Meeting Link',
+                #     message = f'Hey there here is your zoom meeting LINK : {m_url} your meeting ID : {m_id} and PASSWORD : {m_passcode}',
+                #     from_email = settings.EMAIL_HOST_USER,
+                #     recipient_list = ['richidhimar45@gmail.com'],
+             
+               #     fail_silently=False) 
+            return Response(serializer_class.error)
     
-    def put(self, request, meeting_id):
+    def patch(self, request, meeting_id, format=None):
         data = CreateMeeting.objects.get(id=meeting_id)
+        # print("🚀 ~ file: views.py:140 ~ data", data)
+        date = datetime.datetime.now()
         url = 'https://api.zoom.us/v2/meetings'+str(meeting_id)
         header = {'authorization': 'Bearer '+self.request_token}
-        get_zoom_meeting = requests.get(url, headers=header)
-        serializer_class = MeetingSerializer(meeting_id, data=request.data, partial=True)
-        if data == None:
-            return Response("No data")
+        jsonObj = {"topic":request.data, "start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ'), "timezone":request.data, "duration":request.data}
+        meeting = requests.patch(url,json=jsonObj, headers=header)
+        print("🚀 ~ file: views.py:144 ~ meeting", meeting)
+        serializer_class = MeetingSerializer(data, data=request.data)
         if serializer_class.is_valid():
             serializer_class.save()
             return Response(serializer_class.data)
-        return Response(serializer_class.data)
-
-    def get(self,meeting_id):
-        url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
-        header = {'authorization': 'Bearer '+self.request_token}
-        get_zoom_meeting = requests.get(url, headers=header)
-        return Response(get_zoom_meeting)
+        else :
+            return Response("No data")
     
 class MeetingList(APIView):
-    def get(self, request):
-        queryset = CreateMeeting.objects.all()
-        serializer_class = MeetingSerializer(queryset, many=True)
-        return Response(serializer_class.data)
-            
+    permission_classes = [IsAuthenticated, ]
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ["start_time"]
 
-    def meet_filter(self, request):
-        data = CreateMeeting.objects.all()
-        serializer_class = MeetingSerializer
-        filter = ['date']
+    def filter_queryset(self, queryset):
+
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, self)
+            # print("🚀 ~ file: views.py ~ line 21 ~ queryset", queryset)
+            return queryset
+
+    def get_queryset(self):
+        user = self.request.user
+        return CreateMeeting.objects.filter(user=user).order_by("start_time")
+        # return Project.objects.filter(created_by=user).order_by("-created_at")
+
+    def get(self, request, format=None):
+        the_filtered_qs = self.filter_queryset(self.get_queryset())
+        serializer = MeetingSerializer(the_filtered_qs, many=True)
+        # print("🚀 ~ file: views.py ~ line 30 ~ serializer", serializer)
+        return Response(serializer.data)
+
 
 class MeetingLink(APIView):
     def get(self, request):

@@ -15,6 +15,7 @@ import CreateMeeting from './components/video/CreateMeetings';
 import MeetingDetail from './components/video/MeetingDetail';
 import ListMeeting from './components/video/ListMeetings';
 import DashBoard from './login/DashBoard';
+import Signin from "./components/pages/SignInModal";
 import { AuthProvider } from './login/AuthContext';
 
 // Initialize Google Analytics
@@ -46,6 +47,7 @@ const App = () => {
         <AuthProvider>
         <Switch>
           <AppRoute exact path="/" component={Home} layout={LayoutDefault} />
+          <Route exact path="/Sigin" component={Signin} />
           <Route exact path="/plans" component={Plans} />
           <Route exact path="/Product" component={Product} />
           <Route exact path="/CreateMeeting" component={CreateMeeting} />

@@ -3,23 +3,25 @@ import { FormGroup, Input, Form } from "reactstrap";
 import AuthContext from '../../login/AuthContext';
 
   function Register() {
-    const [username, setUsername] = useState("");
+
+    const [registerdata, setRegisterData] = useState({
+        username : '',
+        email : '',
+        first_name : '',
+        last_name : '',
+        password : '',
+        password2 : ''
+    })
     
-    const [email, setEmail] = useState("");
-   
-    const [first_name, setFirst_name] = useState("");
-   
-    const [last_name, setLast_name] = useState("");
-    
-    const [password, setPassword] = useState("");
-    
-    const [password2, setPassword2] = useState("");
-    
+    const changeHandler = e => {
+        setRegisterData({...registerdata, [e.target.name]: e.target.value})
+      }
+
     const { registerUser } = useContext(AuthContext);
 
     const handleSubmit = async e => {
       e.preventDefault();
-      registerUser(username, email, first_name, last_name, password, password2);
+      registerUser(registerdata.username, registerdata.email, registerdata.first_name, registerdata.last_name, registerdata.password, registerdata.password2);
   };
     
   return (
@@ -31,7 +33,7 @@ import AuthContext from '../../login/AuthContext';
                         name="username"
                         id="username"
                         placeholder='userName'
-                        onChange={e => setUsername(e.target.value)}
+                        onChange={changeHandler}
                         required
                     />&nbsp; 
                     <Input
@@ -39,7 +41,7 @@ import AuthContext from '../../login/AuthContext';
                         name="email"
                         id="email"
                         placeholder='email'
-                        onChange={e => setEmail(e.target.value)}
+                        onChange={changeHandler}
                         required
                     />&nbsp; <br />
                     <Input
@@ -47,7 +49,7 @@ import AuthContext from '../../login/AuthContext';
                         name="first_name"
                         id="first_name"
                         placeholder='Firstname'
-                        onChange={e => setFirst_name(e.target.value)}
+                        onChange={changeHandler}
                         required
                     />&nbsp; 
                     <Input
@@ -55,7 +57,7 @@ import AuthContext from '../../login/AuthContext';
                         name="last_name"
                         id="last_name"
                         placeholder='Lastname'
-                        onChange={e => setLast_name(e.target.value)}
+                        onChange={changeHandler}
                         required
                     />&nbsp; <br />
                     <Input
@@ -63,7 +65,7 @@ import AuthContext from '../../login/AuthContext';
                         name="password"
                         id="password"
                         placeholder='password'
-                        onChange={e => setPassword(e.target.value)}
+                        onChange={changeHandler}
                         required
                     />&nbsp; <br />
                     <Input
@@ -71,9 +73,9 @@ import AuthContext from '../../login/AuthContext';
                         name="password2"
                         id="password2"
                         placeholder='re-enter password'
-                        onChange={e => setPassword2(e.target.value)}
+                        onChange={changeHandler}
                         required
-                    />&nbsp; {password2 !== password ? "Passwords do not match" : ""}<br />
+                    />&nbsp; {registerdata.password2 !== registerdata.password ? "Passwords do not match" : ""}<br />
                     <button type="submit" className="btn" >
                     Create
                     </button>

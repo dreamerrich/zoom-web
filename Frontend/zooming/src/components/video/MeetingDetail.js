@@ -89,7 +89,6 @@ const propTypes = {
                            
                         </div>
                         <div>
-                            <Button>Edit</Button> &nbsp; &nbsp; &nbsp; 
                             <Button onClick={() => navigator.clipboard.writeText(meetinglink.meeting_id + "\n" + meetinglink.passcode + "\n" + meetinglink.url)}>Copy Invite</Button>
                         </div>
                     </div>

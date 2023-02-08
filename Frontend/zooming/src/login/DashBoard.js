@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { SectionTilesProps } from '../utils/SectionProps';
 import Header from '../components/layout/Header';
@@ -42,16 +42,22 @@ const propTypes = {
     );
     
     const [user, setUser] = useState([])
-    // const token = localStorage.getItem("authTokens")
-
+    const [email, setEmail] = useState([])
+    const token = localStorage.getItem("authTokens")
+    const accessToken = JSON.parse(token);
+    
+    
     const fetchData = () => {
-        fetch('http://127.0.0.1:8000/profile')
+        fetch('http://127.0.0.1:8000/profile',{ headers: new Headers({
+            'Authorization': 'Bearer ' + accessToken.access, 
+            'Content-Type': 'application/x-www-form-urlencoded'
+        })},)
         .then(Response => {
             return Response.json()
         })
         .then(data => {
-                setUser(data[0].username)
-                console.log("user data",data)
+                setUser(data.username)
+                setEmail(data.email)
         })
     }
 
@@ -66,7 +72,7 @@ const propTypes = {
         >
             <Header />
             <div className="container">
-            
+            {token ? 
                 <div className={innerClasses}>
                     <div className='profile'>
                         <div>
@@ -115,17 +121,18 @@ const propTypes = {
                         <h6>Sign In</h6>
                         <div className='meetingDetail'>
                             <p>Mail ID</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>{user.email}</p>
+                            <p>{email}</p>
                         </div>
                         <div className='meetingDetail'>
                             <p>Password</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                             <p>.....</p>
                         </div>
                     </div>
-                    </div>  
-            </div>
-        <Footer/>
-    </section>
+                </div>  
+                : <div>No user find</div>}
+          </div>
+          <Footer/>
+      </section>
 )
         
 };
