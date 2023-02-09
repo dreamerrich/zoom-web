@@ -54,6 +54,12 @@ class LoginSerializer(serializers.Serializer):
       fields = '__all__'
 
 class MeetingSerializer(serializers.ModelSerializer):
+  user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
   class Meta:
     model = CreateMeeting
     fields = '__all__'
+
+  def get_inventory(self, obj):
+    user = self.context['request'].user
+    return user
+

@@ -98,27 +98,6 @@ export const AuthProvider = ({ children }) => {
       // alert("Something went wrong!");
     }
   }
-
-  const UpdateMeeting = async (topic, start_time, duration, timezone) => {
-    const response = await fetch("http://127.0.0.1:8000/meeting", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        topic, 
-        start_time,  
-        timezone,
-        duration, 
-      })
-    });
-    if (response.status === 200) {
-      // alert("Successfully Created Meeting")
-      history.push("/MeetingDetail");
-    } else {
-      // alert("Something went wrong!");
-    }
-  }
  
 
   const contextData = {
@@ -130,7 +109,6 @@ export const AuthProvider = ({ children }) => {
     loginUser,
     logoutUser,
     CreateMeeting,
-    UpdateMeeting,
   };
 
   useEffect(() => {

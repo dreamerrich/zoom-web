@@ -101,13 +101,13 @@ const propTypes = {
 
     useEffect(() => {
         fetchData()
-    })
+    }, [])
 
     const dataid = (e) => {
-        console.log('e----------------',e);
         
+        console.log('e----------------',e);
     }
-
+   
     return (
         <section
             {...props}

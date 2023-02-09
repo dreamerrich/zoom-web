@@ -57,7 +57,7 @@ class CustomUser(AbstractBaseUser):
         return self.is_admin
 
 class CreateMeeting(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     id = models.AutoField(primary_key=True)
     topic = models.CharField(max_length=255, null=True)
     start_time = models.DateTimeField(null=True)

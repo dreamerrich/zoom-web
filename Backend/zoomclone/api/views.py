@@ -113,7 +113,7 @@ class ZoomMeetings(APIView):
         self.email = email
 
     def post(self,request):
-            serializer_class = MeetingSerializer(data=request.data)
+            serializer_class = MeetingSerializer(data=request.data, context={'request':request})
             date = datetime.datetime.now()
             url = 'https://api.zoom.us/v2/users/'+self.email+'/meetings'
             jsonObj = {"topic":request.data['topic'], "start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ'), "timezone":request.data['timezone'], "duration":request.data['duration']}
@@ -121,10 +121,6 @@ class ZoomMeetings(APIView):
             zoom_create_meeting = requests.post(url,json=jsonObj, headers=header)
             meet_detail = zoom_create_meeting.text
             detail = json.loads(meet_detail)
-            # print("========data", request.data)
-            # print(">>>>>>users", User.objects.filter("username").first())
-            user = request.user
-            print("🚀 ~ file: views.py:127 ~ user", user)
             if serializer_class.is_valid(raise_exception=True):
                 serializer_class.save(
                     topic=request.data['topic'],
@@ -134,9 +130,8 @@ class ZoomMeetings(APIView):
                     url=detail['join_url'],
                     meeting_id=detail['id'],
                     passcode=detail['password'],
-                    user = request.user
+                    user = self.request.user 
                 )
-                print("🚀 ~ file: views.py:138 ~ user", user)
                 return Response(serializer_class.data)
                 # print("",serializer_class)
                 #  m_url = detail['join_url']
@@ -150,22 +145,23 @@ class ZoomMeetings(APIView):
                #     fail_silently=False) 
             return Response(serializer_class.error)
     
-    def patch(self, request, meeting_id, format=None):
-        data = CreateMeeting.objects.get(id=meeting_id)
-        # print("🚀 ~ file: views.py:140 ~ data", data)
+    def patch(self, request, id, format=None):
+        data = CreateMeeting.objects.get(id=id)
+        print("🚀 ~ file: views.py:150 ~ data", data)
         date = datetime.datetime.now()
-        url = 'https://api.zoom.us/v2/meetings'+str(meeting_id)
+        url = 'https://api.zoom.us/v2/meetings'+str(id)
         header = {'authorization': 'Bearer '+self.request_token}
         jsonObj = {"topic":request.data, "start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ'), "timezone":request.data, "duration":request.data}
         meeting = requests.patch(url,json=jsonObj, headers=header)
         print("🚀 ~ file: views.py:144 ~ meeting", meeting)
-        serializer_class = MeetingSerializer(data, data=request.data)
+        serializer_class = MeetingSerializer(data, data=request.data,context={'request':request})
         if serializer_class.is_valid():
             serializer_class.save()
             return Response(serializer_class.data)
         else :
             return Response("No data")
-    
+
+'''-------------filtering---------------'''  
 class MeetingList(APIView):
     permission_classes = [IsAuthenticated, ]
     filter_backends = (filters.SearchFilter,)
@@ -175,7 +171,6 @@ class MeetingList(APIView):
 
         for backend in list(self.filter_backends):
             queryset = backend().filter_queryset(self.request, queryset, self)
-            # print("🚀 ~ file: views.py ~ line 21 ~ queryset", queryset)
             return queryset
 
     def get_queryset(self):
@@ -186,7 +181,6 @@ class MeetingList(APIView):
     def get(self, request, format=None):
         the_filtered_qs = self.filter_queryset(self.get_queryset())
         serializer = MeetingSerializer(the_filtered_qs, many=True)
-        # print("🚀 ~ file: views.py ~ line 30 ~ serializer", serializer)
         return Response(serializer.data)
 
 
