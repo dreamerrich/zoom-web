@@ -34,11 +34,11 @@ export const AuthProvider = ({ children }) => {
       })
     });
     const data = await response.json();
-
     if (response.status === 200) {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
+      console.log("===============tokens",data.access);
       // alert("login Successfully");
       history.push("/Dashboard");
     } else {
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
         password2
       })
     });
-    if (response.status === 201) {
+    if (response.status === 200) {
       history.push("");
       // localStorage.setItem("email", JSON.stringify(email))
       // alert("Successfully registered")
@@ -79,9 +79,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const CreateMeeting = async (topic, start_time, duration, timezone) => {
+    const token = localStorage.getItem("authTokens")
+    const authtoken = JSON.parse(token)
     const response = await fetch("http://127.0.0.1:8000/createmeet", {
       method: "POST",
       headers: {
+        'Authorization': 'Bearer ' + authtoken.access,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -95,7 +98,30 @@ export const AuthProvider = ({ children }) => {
       // alert("Successfully Created Meeting")
       history.push("/MeetingDetail");
     } else {
-      // alert("Something went wrong!");
+      alert("Something went wrong!");
+    }
+  }
+
+  const UpdateMeeting = async () => {
+    const token = localStorage.getItem("authTokens")
+    const authtoken = JSON.parse(token)
+    const id = localStorage.getItem("data")
+    // console.log("id-----------",id)
+
+    const response =  await fetch(`http://127.0.0.1:8000/createmeet/${id}`, {
+      method: "PATCH",
+      headers: new Headers({
+        'Authorization': 'Bearer ' + authtoken.access, 
+        'Content-Type': 'application/x-www-form-urlencoded'})
+    });
+    // console.log("res-----------",response)
+    if (response.status === 200) {
+      // alert("Successfully Created Meeting")
+      history.push(`/`)
+      console.log("......",response.data)
+      return response.data;
+    } else {
+      alert("Something went wrong!");
     }
   }
  
@@ -109,6 +135,7 @@ export const AuthProvider = ({ children }) => {
     loginUser,
     logoutUser,
     CreateMeeting,
+    UpdateMeeting
   };
 
   useEffect(() => {

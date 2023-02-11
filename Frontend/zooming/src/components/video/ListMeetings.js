@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import { Button, Table } from 'reactstrap';
+import { useHistory } from "react-router-dom";
 
 
 const propTypes = {
@@ -31,6 +32,7 @@ const propTypes = {
     ...props
   }) => {
   
+    const history = useHistory()
     const outerClasses = classNames(
       'testimonial section',
       topOuterDivider && 'has-top-divider',
@@ -83,12 +85,12 @@ const propTypes = {
 
     const [meeting, setMeeting] = useState([])
     const token = localStorage.getItem("authTokens");
-    const accessToken = JSON.parse(token);
+    const Token = JSON.parse(token);
     
     const fetchData = () => {
         fetch('http://127.0.0.1:8000/meeting',{ 
             headers: new Headers({
-            'Authorization': 'Bearer ' + accessToken.access, 
+            'Authorization': 'Bearer ' + Token.access, 
             'Content-Type': 'application/x-www-form-urlencoded'
         })},)
         .then(Response => {
@@ -96,6 +98,7 @@ const propTypes = {
         })
         .then(data => {
                 setMeeting(data)
+                console.log(data)
             })
         }
 
@@ -103,9 +106,11 @@ const propTypes = {
         fetchData()
     }, [])
 
+    let data =("")
     const dataid = (e) => {
-        
+        data = localStorage.setItem("data", JSON.stringify(e))
         console.log('e----------------',e);
+        history.push(`/UpdateMeeting/${e}`)
     }
    
     return (
@@ -121,7 +126,7 @@ const propTypes = {
                         </div>
                             <hr />
                            
-                            {token ?
+                            {Token ?
                             <Table>
                                 <thead>
                                     <tr>
@@ -135,7 +140,7 @@ const propTypes = {
                                     <tr>
                                         <td><h6>{i.start_time}</h6></td>
                                         <td><h6>{i.topic}</h6><br/>{i.meeting_id}</td>
-                                        <td><Button onClick={()=>dataid(i.meeting_id)}>Edit</Button></td>
+                                        <td><Button onClick={()=>dataid(i.id)}>Edit</Button></td>
                                     </tr>
                                     )})}
                                     <tr>

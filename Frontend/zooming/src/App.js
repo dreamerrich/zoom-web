@@ -55,7 +55,7 @@ const App = () => {
           <Route exact path="/MeetingDetail" component={MeetingDetail} />
           <Route exact path="/ListMeeting" component={ListMeeting} />
           <Route exact path="/Dashboard" component={DashBoard} />
-          <Route exact path="/UpdateMeeting" component={UpdateMeeting} />
+          <Route exact path="/UpdateMeeting/:id" component={UpdateMeeting} />
         </Switch>
         </AuthProvider>
         </div>

@@ -124,9 +124,6 @@ const Header = ({
                       <Link to="/Product" onClick={openMenu}>Products</Link>
                     </li>
                     <li>
-                      <Link to="#solutions" onClick={closeMenu}>Solutions</Link>
-                    </li>
-                    <li>
                       <Link to="/ListMeeting" onClick={openMenu}>Meetings</Link>
                     </li>
                     <li>

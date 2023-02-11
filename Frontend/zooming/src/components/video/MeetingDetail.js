@@ -41,15 +41,21 @@ const propTypes = {
     );
 
     const [meetinglink, setMeetingLink] = useState({})
+    const token = localStorage.getItem("authTokens");
+    const Token = JSON.parse(token);
 
     const fetchData = () => {
-        fetch('http://127.0.0.1:8000/meetlink')
+        fetch('http://127.0.0.1:8000/meetlink',{ 
+            headers: new Headers({
+            'Authorization': 'Bearer ' + Token.access, 
+            'Content-Type': 'application/x-www-form-urlencoded'
+        })},)
         .then(Response => {
             return Response.json()
         })
         .then(data => {
                 setMeetingLink(data)
-                console.log(".....",data)
+                console.log(data)
             })
         }
 

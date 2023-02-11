@@ -17,6 +17,7 @@ from rest_framework import filters
 from django_zoom_meetings import ZoomMeetings
 from django.core.mail import send_mail
 from zoomclone import settings
+from django.http import Http404
 import datetime
 import jwt
 import requests
@@ -145,8 +146,22 @@ class ZoomMeetings(APIView):
                #     fail_silently=False) 
             return Response(serializer_class.error)
     
+    def get_object(self, id):
+        try:
+            user = self.request.user
+            return CreateMeeting.objects.filter(user=user).get(pk=id)
+        except CreateMeeting.DoesNotExist as e:
+            raise Http404 from e
+
+    def get(self, request, id, format=None):
+        data = self.get_object(id)
+        # print("🚀 ~ file: views.py ~ line 55 ~ project_data", data)
+        serializer = MeetingSerializer(data)
+        # print("🚀 ~ file: views.py:161 ~ serializer", serializer.data)
+        return Response(serializer.data)
+    
     def patch(self, request, id, format=None):
-        data = CreateMeeting.objects.get(id=id)
+        data = self.get_object(id)
         print("🚀 ~ file: views.py:150 ~ data", data)
         date = datetime.datetime.now()
         url = 'https://api.zoom.us/v2/meetings'+str(id)
@@ -157,6 +172,7 @@ class ZoomMeetings(APIView):
         serializer_class = MeetingSerializer(data, data=request.data,context={'request':request})
         if serializer_class.is_valid():
             serializer_class.save()
+            print(">>>>>>>>>>>>",serializer_class.data)
             return Response(serializer_class.data)
         else :
             return Response("No data")
@@ -186,6 +202,8 @@ class MeetingList(APIView):
 
 class MeetingLink(APIView):
     def get(self, request):
-        queryset = CreateMeeting.objects.latest('start_time')
-        serializer_class = MeetingSerializer(queryset)
+        user = request.user
+        print("🚀 ~ file: views.py:206 ~ user", user)
+        queryset = CreateMeeting.objects.filter(user=user).latest('start_time')
+        serializer_class = MeetingSerializer(queryset, context={'request':request})
         return Response(serializer_class.data)

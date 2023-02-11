@@ -53,7 +53,7 @@ const propTypes = {
 
     const changeHandler = e => {
       setData({...data, [e.target.name]: e.target.value})
-    }
+    } 
 
     const { CreateMeeting } = useContext(AuthContext);
     
