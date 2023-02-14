@@ -6,7 +6,7 @@ import { SectionTilesProps } from '../../utils/SectionProps';
 import Button from '../elements/Button';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
-import zones from '../../data/timezones'
+import zones from '../../data/timezones';
 
 const propTypes = {
     ...SectionTilesProps.types
@@ -58,12 +58,52 @@ const propTypes = {
     const { CreateMeeting } = useContext(AuthContext);
     
     const token = localStorage.getItem("authTokens");
+    const id = localStorage.getItem("data")
+    // console.log("🚀 ~ file: CreateMeetings.js:63 ~ id", id)
+    const accessToken = JSON.parse(token);
 
-    const handleSubmit = async e => {
+    const Create = async e => {
+        e.preventDefault();
+        console.log("in create")
+        CreateMeeting( data.topic, data.start_time, data.time, data.timezone);
+    }
+
+    const UpdateMeeting = async e => {
+      console.log("in update");
       e.preventDefault();
-      CreateMeeting( data.topic, data.start_time, data.time, data.timezone);
+      const updateddata = {
+        id : id,
+        user : id,
+        topic : data.topic,
+        start_time : data.start_time,
+        duration : data.time,
+        timezone : data.timezone
+      }
+        console.log("🚀 ~ file: CreateMeetings.js:80 ~ UpdateMeeting ~ timezone", data.timezone)
+        console.log("🚀 ~ file: CreateMeetings.js:80 ~ UpdateMeeting ~ duration", data.duration)
+        console.log("🚀 ~ file: CreateMeetings.js:80 ~ UpdateMeeting ~ start_time", data.start_time)
+        console.log("🚀 ~ file: CreateMeetings.js:80 ~ UpdateMeeting ~ topic", data.topic)
+
+      fetch('http://127.0.0.1:8000/createmeet/'+id,
+      { 
+          method: "PATCH",  
+          headers: new Headers({
+          'Authorization': 'Bearer ' + accessToken.access, 
+          'Content-Type': 'application/x-www-form-urlencoded'
+          }),
+          body: JSON.stringify(updateddata)
+      }
+      )
+      setData(updateddata)
+      console.log("🚀 ~ file: UpdateMeeting.js:111 ~ handleSubmit ~ setData", setData)
+      console.log("submit");
     };
-    
+
+    const defaultIfEmpty = value => {
+      return value === "" ? "" : value;
+    };
+
+
     return (
       <section
       {...props}
@@ -78,7 +118,7 @@ const propTypes = {
           </div>
           { token ?
             <div className='meetingForm'>
-              <Form style={{textAlign:"left"}} onSubmit={handleSubmit}>
+              <Form style={{textAlign:"left"}} onSubmit={setData ?Create : UpdateMeeting}>
                 <FormGroup>
                     <div className='topic'>
                       <Label>Topic</Label> &nbsp; &nbsp; &nbsp;
@@ -87,6 +127,7 @@ const propTypes = {
                           name="topic"
                           id="topic"
                           placeholder='topic'
+                          value={defaultIfEmpty(data.topic)}
                           onChange={changeHandler}
                           required
                       />&nbsp;
@@ -99,6 +140,7 @@ const propTypes = {
                           name="start_time"
                           id="start_time"
                           placeholder='date'
+                          value={defaultIfEmpty(data.start_time)}
                           onChange={changeHandler}
                           required
                       />&nbsp;
@@ -116,6 +158,7 @@ const propTypes = {
                                 name="time"
                                 id="time"
                                 placeholder='duration'
+                                value={defaultIfEmpty(data.duration)}
                                 onChange={changeHandler}
                                 required
                         >&nbsp; &nbsp;
@@ -131,6 +174,7 @@ const propTypes = {
                           name='timezone'
                           id='timezone'
                           placeholder='timezone'
+                          value={defaultIfEmpty(data.timezone)}
                           onChange={changeHandler}  
                           required
                         >&nbsp; &nbsp;

@@ -65,6 +65,7 @@ const propTypes = {
         fetchData()
     }, [])
 
+    
     return (
         <section
             {...props}

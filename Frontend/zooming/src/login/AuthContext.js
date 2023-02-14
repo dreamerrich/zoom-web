@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
       })
     });
     if (response.status === 200) {
-      history.push("");
+      history.push("/Sigin");
       // localStorage.setItem("email", JSON.stringify(email))
       // alert("Successfully registered")
     } else {

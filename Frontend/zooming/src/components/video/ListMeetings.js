@@ -110,7 +110,7 @@ const propTypes = {
     const dataid = (e) => {
         data = localStorage.setItem("data", JSON.stringify(e))
         console.log('e----------------',e);
-        history.push(`/UpdateMeeting/${e}`)
+        history.push(`/CreateMeeting/${e}`)
     }
    
     return (

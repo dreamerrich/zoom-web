@@ -164,18 +164,27 @@ class ZoomMeetings(APIView):
         data = self.get_object(id)
         print("🚀 ~ file: views.py:150 ~ data", data)
         date = datetime.datetime.now()
-        url = 'https://api.zoom.us/v2/meetings'+str(id)
+        url = 'https://api.zoom.us/v2/meetings/'+str(data)
+        print("🚀 ~ file: views.py:168 ~ url", url)
         header = {'authorization': 'Bearer '+self.request_token}
-        jsonObj = {"topic":request.data, "start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ'), "timezone":request.data, "duration":request.data}
-        meeting = requests.patch(url,json=jsonObj, headers=header)
+        jsonObj = {"start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ')}
+        meeting = requests.patch(url, json=jsonObj, headers=header)
         print("🚀 ~ file: views.py:144 ~ meeting", meeting)
-        serializer_class = MeetingSerializer(data, data=request.data,context={'request':request})
-        if serializer_class.is_valid():
-            serializer_class.save()
+        meet_detail = meeting.text
+        print("🚀 ~ file: views.py:174 ~ meet_detail", meet_detail)
+        # detail = json.loads(meet_detail)
+        serializer_class = MeetingSerializer(data=request.data,context={'request':request})
+        if serializer_class.is_valid(raise_exception=True):
+            serializer_class.save(
+                    url=data.url,
+                    meeting_id=data.id,
+                    passcode=data.passcode,
+                    user = self.request.user 
+            )
             print(">>>>>>>>>>>>",serializer_class.data)
             return Response(serializer_class.data)
         else :
-            return Response("No data")
+            return Response("No data", serializer_class.error)
 
 '''-------------filtering---------------'''  
 class MeetingList(APIView):
