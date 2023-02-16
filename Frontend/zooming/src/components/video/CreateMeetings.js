@@ -1,4 +1,4 @@
-import React, { useContext,useState} from 'react';
+import React, { useContext,useState, useEffect } from 'react';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 import AuthContext from '../../login/AuthContext';
 import classNames from 'classnames';
@@ -59,8 +59,9 @@ const propTypes = {
     
     const token = localStorage.getItem("authTokens");
     const id = localStorage.getItem("data")
-    // console.log("🚀 ~ file: CreateMeetings.js:63 ~ id", id)
     const accessToken = JSON.parse(token);
+    const auth = accessToken.access
+    // console.log(">>>>>>>>>>>>>",auth);
 
     const Create = async e => {
         e.preventDefault();
@@ -68,41 +69,57 @@ const propTypes = {
         CreateMeeting( data.topic, data.start_time, data.time, data.timezone);
     }
 
-    const UpdateMeeting = async e => {
-      console.log("in update");
-      e.preventDefault();
-      const updateddata = {
-        id : id,
-        user : id,
-        topic : data.topic,
-        start_time : data.start_time,
-        duration : data.time,
-        timezone : data.timezone
-      }
-        console.log("🚀 ~ file: CreateMeetings.js:80 ~ UpdateMeeting ~ timezone", data.timezone)
-        console.log("🚀 ~ file: CreateMeetings.js:80 ~ UpdateMeeting ~ duration", data.duration)
-        console.log("🚀 ~ file: CreateMeetings.js:80 ~ UpdateMeeting ~ start_time", data.start_time)
-        console.log("🚀 ~ file: CreateMeetings.js:80 ~ UpdateMeeting ~ topic", data.topic)
+    const [ meetingdata, setMeetingData ] = useState([])
 
-      fetch('http://127.0.0.1:8000/createmeet/'+id,
-      { 
-          method: "PATCH",  
-          headers: new Headers({
-          'Authorization': 'Bearer ' + accessToken.access, 
-          'Content-Type': 'application/x-www-form-urlencoded'
-          }),
-          body: JSON.stringify(updateddata)
-      }
-      )
-      setData(updateddata)
-      console.log("🚀 ~ file: UpdateMeeting.js:111 ~ handleSubmit ~ setData", setData)
-      console.log("submit");
-    };
+    const get_meeting = async  => {
+      console.log("get meeting");
+      fetch('http://127.0.0.1:8000/createmeet/'+id,{ 
+            headers: new Headers({
+            'Authorization': 'Bearer ' + auth, 
+            'Content-Type': 'application/x-www-form-urlencoded'
+        })},)
+        .then(Response => {
+            return Response.json()
+        })
+        .then(data => {
+                setMeetingData(data)
+                console.log(data)
+            })
+    }
+
+  useEffect(() => {
+      get_meeting()
+  }, [])
 
     const defaultIfEmpty = value => {
       return value === "" ? "" : value;
     };
 
+    const handleSubmit = (e) => {
+      console.log("id is in update",id);
+      e.preventDefault();
+      if(!id){
+        Create()
+      } else {
+        const update_meeting = async => {
+          fetch('http://127.0.0.1:8000/createmeet/'+id, meetingdata, { 
+            method: 'PATCH',
+            headers: new Headers({  
+            'Authorization': 'Bearer ' + auth, 
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }),
+      },) 
+        .then(Response => {
+            return Response.json()
+        })
+        .then(
+                setMeetingData()
+            )
+        }
+        update_meeting()
+        localStorage.removeItem('data')
+      }
+    }
 
     return (
       <section
@@ -118,7 +135,7 @@ const propTypes = {
           </div>
           { token ?
             <div className='meetingForm'>
-              <Form style={{textAlign:"left"}} onSubmit={setData ?Create : UpdateMeeting}>
+              <Form style={{textAlign:"left"}} onSubmit={handleSubmit}>
                 <FormGroup>
                     <div className='topic'>
                       <Label>Topic</Label> &nbsp; &nbsp; &nbsp;
@@ -127,7 +144,7 @@ const propTypes = {
                           name="topic"
                           id="topic"
                           placeholder='topic'
-                          value={defaultIfEmpty(data.topic)}
+                          value={defaultIfEmpty(meetingdata.topic)}
                           onChange={changeHandler}
                           required
                       />&nbsp;
@@ -140,7 +157,7 @@ const propTypes = {
                           name="start_time"
                           id="start_time"
                           placeholder='date'
-                          value={defaultIfEmpty(data.start_time)}
+                          value={defaultIfEmpty(meetingdata.start_time)}
                           onChange={changeHandler}
                           required
                       />&nbsp;
@@ -158,7 +175,7 @@ const propTypes = {
                                 name="time"
                                 id="time"
                                 placeholder='duration'
-                                value={defaultIfEmpty(data.duration)}
+                                value={defaultIfEmpty(meetingdata.duration)}
                                 onChange={changeHandler}
                                 required
                         >&nbsp; &nbsp;
@@ -174,7 +191,7 @@ const propTypes = {
                           name='timezone'
                           id='timezone'
                           placeholder='timezone'
-                          value={defaultIfEmpty(data.timezone)}
+                          value={defaultIfEmpty(meetingdata.timezone)}
                           onChange={changeHandler}  
                           required
                         >&nbsp; &nbsp;
