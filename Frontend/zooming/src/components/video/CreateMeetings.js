@@ -63,6 +63,10 @@ const propTypes = {
     const auth = accessToken.access
     // console.log(">>>>>>>>>>>>>",auth);
 
+    // var dateobj = new Date(data.start_time)
+    // var date = dateobj.toISOString();
+    // console.log("?????????",date)
+
     const Create = async e => {
         e.preventDefault();
         console.log("in create")
@@ -74,10 +78,10 @@ const propTypes = {
     const get_meeting = async  => {
       console.log("get meeting");
       fetch('http://127.0.0.1:8000/createmeet/'+id,{ 
-            headers: new Headers({
-            'Authorization': 'Bearer ' + auth, 
-            'Content-Type': 'application/x-www-form-urlencoded'
-        })},)
+        headers: {
+          'Authorization': 'Bearer ' + auth,
+          "Content-Type": "application/json"
+        }})
         .then(Response => {
             return Response.json()
         })
@@ -104,11 +108,10 @@ const propTypes = {
         const update_meeting = async => {
           fetch('http://127.0.0.1:8000/createmeet/'+id, meetingdata, { 
             method: 'PATCH',
-            headers: new Headers({  
-            'Authorization': 'Bearer ' + auth, 
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }),
-      },) 
+            headers: {
+              'Authorization': 'Bearer ' + auth,
+              "Content-Type": "application/json"
+            }}) 
         .then(Response => {
             return Response.json()
         })
@@ -157,6 +160,7 @@ const propTypes = {
                           name="start_time"
                           id="start_time"
                           placeholder='date'
+                          dateformat={"yyyy/mm/ddThh:mm:ssz"}
                           value={defaultIfEmpty(meetingdata.start_time)}
                           onChange={changeHandler}
                           required

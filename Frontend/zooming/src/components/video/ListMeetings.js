@@ -86,6 +86,13 @@ const propTypes = {
     const [meeting, setMeeting] = useState([])
     const token = localStorage.getItem("authTokens");
     const Token = JSON.parse(token);
+
+    const meeting_list = [meeting]
+    const data_meeting = meeting_list.filter(time => {return meeting.start_time})           
+
+    // var dateobj = meeting.start_time.toISOString()
+    // var date = dateobj.toDateTimeString();
+    // console.log("?????????",dateobj)
     
     const fetchData = () => {
         fetch('http://127.0.0.1:8000/meeting',{ 
@@ -129,6 +136,9 @@ const propTypes = {
                             {Token ?
                             <Table>
                                 <thead>
+                                    <tr>
+                                        <></>
+                                    </tr>
                                     <tr>
                                         <th><h4>Start time</h4></th>
                                         <th><h4>Topic</h4></th>
