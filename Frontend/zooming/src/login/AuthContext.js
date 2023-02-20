@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
-
+import axios from 'axios'
 
 const AuthContext = createContext();
 
@@ -38,8 +38,6 @@ export const AuthProvider = ({ children }) => {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
-      console.log("===============tokens",data.access);
-      // alert("login Successfully");
       history.push("/Dashboard");
     } else {
       alert("Something went wrong!");
@@ -63,11 +61,8 @@ export const AuthProvider = ({ children }) => {
     });
     if (response.status === 200) {
       history.push("/Sigin");
-      // localStorage.setItem("email", JSON.stringify(email))
-      // alert("Successfully registered")
     } else {
-      console.log("Error while registering")
-      // alert("Something went wrong!");
+      alert("Something went wrong!");
     }
   };
  
@@ -95,7 +90,6 @@ export const AuthProvider = ({ children }) => {
       })
     });
     if (response.status === 200) {
-      // alert("Successfully Created Meeting")
       history.push("/MeetingDetail");
     } else {
       alert("Something went wrong!");
@@ -106,19 +100,15 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("authTokens")
     const authtoken = JSON.parse(token)
     const id = localStorage.getItem("data")
-    // console.log("id-----------",id)
 
-    const response =  await fetch(`http://127.0.0.1:8000/createmeet/${id}`, {
+    const response =  await axios(`http://127.0.0.1:8000/updatemeet/${id}`, {
       method: "PATCH",
-      headers: new Headers({
+      headers: {
         'Authorization': 'Bearer ' + authtoken.access, 
-        'Content-Type': 'application/x-www-form-urlencoded'})
+        'Content-Type': 'application/x-www-form-urlencoded'}
     });
-    // console.log("res-----------",response)
     if (response.status === 200) {
-      // alert("Successfully Created Meeting")
-      history.push(`/`)
-      console.log("......",response.data)
+      history.push(`/MeetingDetail`)
       return response.data;
     } else {
       alert("Something went wrong!");

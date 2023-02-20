@@ -5,7 +5,9 @@ import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import { Button, Table } from 'reactstrap';
 import { useHistory } from "react-router-dom";
-
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; 
+import 'react-date-range/dist/theme/default.css';
 
 const propTypes = {
     navPosition: PropTypes.string,
@@ -119,6 +121,23 @@ const propTypes = {
         console.log('e----------------',e);
         history.push(`/CreateMeeting/${e}`)
     }
+
+    const [startDate,setStartDate]= useState(new Date());
+    const [endDate,setEndDate]= useState(new Date());
+    const [allmeeting, setAllMeeting] = useState([]);
+    const [alldata, setAllData] = useState([])
+
+    const selectionRange = {
+        startDate: startDate,
+        endDate: endDate,
+        key: 'selection',
+      }
+
+    const handleSelect = (date) =>{
+        let filterdata = allmeeting.filter()
+        setStartDate(date.selection.startDate);
+        setEndDate(date.selection.endDate); 
+      };
    
     return (
         <section
@@ -137,7 +156,9 @@ const propTypes = {
                             <Table>
                                 <thead>
                                     <tr>
-                                        <></>
+                                        <DateRangePicker 
+                                        ranges={[selectionRange]}
+                                        onChange={handleSelect} />
                                     </tr>
                                     <tr>
                                         <th><h4>Start time</h4></th>

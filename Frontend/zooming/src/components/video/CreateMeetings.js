@@ -7,6 +7,7 @@ import Button from '../elements/Button';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import zones from '../../data/timezones';
+import moment from 'moment';
 
 const propTypes = {
     ...SectionTilesProps.types
@@ -52,11 +53,16 @@ const propTypes = {
     })
 
     const changeHandler = e => {
-      setData({...data, [e.target.name]: e.target.value})
+      if(id){
+        setMeetingData({...meetingdata, [e.target.name]: e.target.value})
+      }
+      else{
+        setData({...data, [e.target.name]: e.target.value})
+      }
     } 
 
     const { CreateMeeting } = useContext(AuthContext);
-    
+    const { UpdateMeeting } = useContext(AuthContext)
     const token = localStorage.getItem("authTokens");
     const id = localStorage.getItem("data")
     const accessToken = JSON.parse(token);
@@ -66,18 +72,20 @@ const propTypes = {
     // var dateobj = new Date(data.start_time)
     // var date = dateobj.toISOString();
     // console.log("?????????",date)
+   
 
     const Create = async e => {
         e.preventDefault();
         console.log("in create")
-        CreateMeeting( data.topic, data.start_time, data.time, data.timezone);
+        CreateMeeting(data.topic, data.start_time, data.duration, data.timezone);
+        console.log(">>>>>>",CreateMeeting);
     }
 
     const [ meetingdata, setMeetingData ] = useState([])
 
     const get_meeting = async  => {
-      console.log("get meeting");
-      fetch('http://127.0.0.1:8000/createmeet/'+id,{ 
+      console.log("get meeting by id");
+      fetch('http://127.0.0.1:8000/updatemeet/'+id,{ 
         headers: {
           'Authorization': 'Bearer ' + auth,
           "Content-Type": "application/json"
@@ -86,43 +94,38 @@ const propTypes = {
             return Response.json()
         })
         .then(data => {
+              //  const time = moment(meetingdata.start_time).format("DD/MM/yyyyThh:mm:ssz") 
                 setMeetingData(data)
-                console.log(data)
+                console.log(">>>>>>>>>",data)
             })
     }
 
-  useEffect(() => {
+    useEffect(() => {
       get_meeting()
-  }, [])
+    }, [])
+  
+  const Update = async e => {
+    e.preventDefault();
+    UpdateMeeting(meetingdata.topic, meetingdata.start_time, meetingdata.time, meetingdata.timezone)
+    console.log("in update")
+  }
 
-    const defaultIfEmpty = value => {
-      return value === "" ? "" : value;
-    };
-
-    const handleSubmit = (e) => {
-      console.log("id is in update",id);
-      e.preventDefault();
-      if(!id){
-        Create()
-      } else {
-        const update_meeting = async => {
-          fetch('http://127.0.0.1:8000/createmeet/'+id, meetingdata, { 
-            method: 'PATCH',
-            headers: {
-              'Authorization': 'Bearer ' + auth,
-              "Content-Type": "application/json"
-            }}) 
-        .then(Response => {
-            return Response.json()
-        })
-        .then(
-                setMeetingData()
-            )
-        }
-        update_meeting()
-        localStorage.removeItem('data')
-      }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(">>>>>>>>>>>>>>",id);
+    if(!id){
+      console.log("create");
+      Create()
+    } else {
+      console.log("update");
+      Update(meetingdata)
+      localStorage.removeItem('data')
     }
+  }
+
+  const defaultIfEmpty = value => {
+    return value === "" ? "" : value;
+  };
 
     return (
       <section
@@ -160,7 +163,6 @@ const propTypes = {
                           name="start_time"
                           id="start_time"
                           placeholder='date'
-                          dateformat={"yyyy/mm/ddThh:mm:ssz"}
                           value={defaultIfEmpty(meetingdata.start_time)}
                           onChange={changeHandler}
                           required

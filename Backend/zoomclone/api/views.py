@@ -117,7 +117,7 @@ class ZoomMeetings(APIView):
             serializer_class = MeetingSerializer(data=request.data, context={'request':request})
             date = datetime.datetime.now()
             url = 'https://api.zoom.us/v2/users/'+self.email+'/meetings'
-            jsonObj = {"topic":request.data['topic'], "start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ'), "timezone":request.data['timezone'], "duration":request.data['duration']}
+            jsonObj = {"topic":request.data['topic'], "start_time":date.strftime('yyyy-MM-ddTHH:mm:ssZ'), "timezone":request.data['timezone'], "duration":request.data['duration']}
             header = {'authorization': 'Bearer '+self.request_token}
             zoom_create_meeting = requests.post(url,json=jsonObj, headers=header)
             meet_detail = zoom_create_meeting.text
@@ -149,13 +149,13 @@ class ZoomMeetings(APIView):
     def get_object(self, id):
         try:
             user = self.request.user
-            return CreateMeeting.objects.filter(user=user).get(pk=id)
+            return CreateMeeting.objects.filter(user=user).get(id=id)
         except CreateMeeting.DoesNotExist as e:
             raise Http404 from e
 
     def get(self, request, id, format=None):
         data = self.get_object(id)
-        # print("🚀 ~ file: views.py ~ line 55 ~ project_data", data)
+        print("🚀 ~ file: views.py ~ line 55 ~ project_data", data)
         serializer = MeetingSerializer(data)
         print("🚀 ~ file: views.py:161 ~ serializer", serializer.data)
         return Response(serializer.data)
@@ -167,7 +167,7 @@ class ZoomMeetings(APIView):
         url = 'https://api.zoom.us/v2/meetings/'+str(data_get)
         print("🚀 ~ file: views.py:168 ~ url", url)
         header = {'authorization': 'Bearer '+self.request_token}
-        jsonObj = {"start_time":date.strftime('%Y/%m/%d,%H:%M:%SZ')}
+        jsonObj = {"start_time":date.strftime('yyyy-MM-ddTHH:mm:ssZ')}
         meeting = requests.patch(url, json=jsonObj, headers=header)
         print("🚀 ~ file: views.py:144 ~ meeting", meeting)
         meet_detail = meeting.text
@@ -177,7 +177,7 @@ class ZoomMeetings(APIView):
         if serializer_class.is_valid(raise_exception=True):
             serializer_class.save(
                     url=data_get.url,
-                    meeting_id=data_get.id,
+                    meeting_id=data_get.meeting_id,
                     passcode=data_get.passcode,
                     user = self.request.user 
             )
