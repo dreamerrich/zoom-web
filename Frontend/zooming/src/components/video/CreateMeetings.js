@@ -8,6 +8,7 @@ import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import zones from '../../data/timezones';
 import moment from 'moment';
+import { useHistory } from "react-router-dom"
 
 const propTypes = {
     ...SectionTilesProps.types
@@ -61,8 +62,8 @@ const propTypes = {
       }
     } 
 
-    const { CreateMeeting } = useContext(AuthContext);
     const { UpdateMeeting } = useContext(AuthContext)
+    const { CreateMeeting } = useContext(AuthContext);
     const token = localStorage.getItem("authTokens");
     const id = localStorage.getItem("data")
     const accessToken = JSON.parse(token);
@@ -77,13 +78,14 @@ const propTypes = {
     const Create = async e => {
         e.preventDefault();
         console.log("in create")
-        CreateMeeting(data.topic, data.start_time, data.duration, data.timezone);
+        CreateMeeting(data.topic, data.start_time, data.time, data.timezone);
         console.log(">>>>>>",CreateMeeting);
     }
 
+    const history = useHistory()
     const [ meetingdata, setMeetingData ] = useState([])
 
-    const get_meeting = async  => {
+    const get_meeting = async e => {
       console.log("get meeting by id");
       fetch('http://127.0.0.1:8000/updatemeet/'+id,{ 
         headers: {
@@ -103,12 +105,6 @@ const propTypes = {
     useEffect(() => {
       get_meeting()
     }, [])
-  
-  const Update = async e => {
-    e.preventDefault();
-    UpdateMeeting(meetingdata.topic, meetingdata.start_time, meetingdata.time, meetingdata.timezone)
-    console.log("in update")
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -117,11 +113,11 @@ const propTypes = {
       console.log("create");
       Create()
     } else {
-      console.log("update");
-      Update(meetingdata)
+      UpdateMeeting(meetingdata.topic,meetingdata.start_time,meetingdata.time,meetingdata.timezone)
+      // history.push(`/MeetingDetail`)
       localStorage.removeItem('data')
     }
-  }
+    }
 
   const defaultIfEmpty = value => {
     return value === "" ? "" : value;
@@ -181,7 +177,7 @@ const propTypes = {
                                 name="time"
                                 id="time"
                                 placeholder='duration'
-                                value={defaultIfEmpty(meetingdata.duration)}
+                                value={defaultIfEmpty(meetingdata.time)}
                                 onChange={changeHandler}
                                 required
                         >&nbsp; &nbsp;

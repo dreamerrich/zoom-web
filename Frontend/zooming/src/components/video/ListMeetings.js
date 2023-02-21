@@ -89,8 +89,8 @@ const propTypes = {
     const token = localStorage.getItem("authTokens");
     const Token = JSON.parse(token);
 
-    const meeting_list = [meeting]
-    const data_meeting = meeting_list.filter(time => {return meeting.start_time})           
+    // const meeting_list = [meeting]
+    // const data_meeting = meeting_list.filter(time => {return meeting.start_time})           
 
     // var dateobj = meeting.start_time.toISOString()
     // var date = dateobj.toDateTimeString();
@@ -119,7 +119,7 @@ const propTypes = {
     const dataid = (e) => {
         data = localStorage.setItem("data", JSON.stringify(e))
         console.log('e----------------',e);
-        history.push(`/CreateMeeting/${e}`)
+        history.push(`/UpdateMeeting/${e}`)
     }
 
     const [startDate,setStartDate]= useState(new Date());
@@ -156,9 +156,7 @@ const propTypes = {
                             <Table>
                                 <thead>
                                     <tr>
-                                        <DateRangePicker 
-                                        ranges={[selectionRange]}
-                                        onChange={handleSelect} />
+                                        
                                     </tr>
                                     <tr>
                                         <th><h4>Start time</h4></th>

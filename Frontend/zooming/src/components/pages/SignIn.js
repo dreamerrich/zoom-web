@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react';
-import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Button, Form, FormGroup, Input } from 'reactstrap';
 import AuthContext from '../../login/AuthContext';
 
 
@@ -32,12 +32,6 @@ const SignIn = () => {
                         required
                     />&nbsp; <br />
                     <Button color="light" >SignIn</Button> &nbsp; &nbsp; <br/>
-                    <br />
-                    <input 
-                    type="checkbox"
-                    name="remember"
-                    />
-                    <Label for="remember">&nbsp;&nbsp;Keep me signed in</Label>
                     <br />
                 </FormGroup>
                     &nbsp; &nbsp; 

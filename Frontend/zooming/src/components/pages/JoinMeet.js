@@ -59,12 +59,6 @@ export default function JoinMeeting() {
                         onChange={(e) => setPassword(e.target.value)}
                     />&nbsp; 
                     <div style={{textAlign:"left"}}>
-                    <input 
-                    type="checkbox"
-                    name="remember"
-                    onChange={handleChange}
-                    />
-                    <Label for="remember">&nbsp;&nbsp;Remember my name for future meetings</Label>
                     <br />
                     <input 
                     type="checkbox"

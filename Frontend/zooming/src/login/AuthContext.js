@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
         'Content-Type': 'application/x-www-form-urlencoded'}
     });
     if (response.status === 200) {
-      history.push(`/MeetingDetail`)
+      // history.push(`/MeetingDetail`)
       return response.data;
     } else {
       alert("Something went wrong!");
