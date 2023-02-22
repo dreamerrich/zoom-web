@@ -7,28 +7,27 @@ import Button from '../elements/Button';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import zones from '../../data/timezones';
-import moment from 'moment';
 import { useHistory } from "react-router-dom"
 
 const propTypes = {
-    ...SectionTilesProps.types
-  }
+  ...SectionTilesProps.types
+}
   
-  const defaultProps = {
-    ...SectionTilesProps.defaults
-  }
+const defaultProps = {
+  ...SectionTilesProps.defaults
+}
   
-  const CreateMeeting = ({
-    className,
-    topOuterDivider,
-    bottomOuterDivider,
-    topDivider,
-    bottomDivider,
-    hasBgColor,
-    invertColor,
-    pushLeft,
-    ...props
-  }) => {
+const CreateMeeting = ({
+  className,
+  topOuterDivider,
+  bottomOuterDivider,
+  topDivider,
+  bottomDivider,
+  hasBgColor,
+  invertColor,
+  pushLeft,
+  ...props
+}) => {
   
     const outerClasses = classNames(
       'testimonial section',
@@ -49,7 +48,7 @@ const propTypes = {
       id: '',
       topic: '',
       start_time:'',
-      time:'',
+      duration:'',
       timezone:''
     })
 
@@ -62,41 +61,36 @@ const propTypes = {
       }
     } 
 
-    const { UpdateMeeting } = useContext(AuthContext)
-    const { CreateMeeting } = useContext(AuthContext);
+    const { UpdateMeeting, CreateMeeting } = useContext(AuthContext);
+    // const { CreateMeeting } = useContext(AuthContext);
+
     const token = localStorage.getItem("authTokens");
-    const id = localStorage.getItem("data")
     const accessToken = JSON.parse(token);
     const auth = accessToken.access
-    // console.log(">>>>>>>>>>>>>",auth);
 
-    // var dateobj = new Date(data.start_time)
-    // var date = dateobj.toISOString();
-    // console.log("?????????",date)
-   
+    const id = localStorage.getItem("data")
 
     const Create = async e => {
         e.preventDefault();
         console.log("in create")
-        CreateMeeting(data.topic, data.start_time, data.time, data.timezone);
-        console.log(">>>>>>",CreateMeeting);
+        CreateMeeting(data.topic, data.start_time, data.duration, data.timezone);
+        console.log(">>>>>> create",CreateMeeting);
     }
 
     const history = useHistory()
+
     const [ meetingdata, setMeetingData ] = useState([])
 
     const get_meeting = async e => {
-      console.log("get meeting by id");
       fetch('http://127.0.0.1:8000/updatemeet/'+id,{ 
         headers: {
-          'Authorization': 'Bearer ' + auth,
-          "Content-Type": "application/json"
+          'Authorization': 'Bearer ' + auth, 
+          'Content-Type': 'application/json'
         }})
         .then(Response => {
             return Response.json()
         })
         .then(data => {
-              //  const time = moment(meetingdata.start_time).format("DD/MM/yyyyThh:mm:ssz") 
                 setMeetingData(data)
                 console.log(">>>>>>>>>",data)
             })
@@ -113,8 +107,7 @@ const propTypes = {
       console.log("create");
       Create()
     } else {
-      UpdateMeeting(meetingdata.topic,meetingdata.start_time,meetingdata.time,meetingdata.timezone)
-      // history.push(`/MeetingDetail`)
+      UpdateMeeting(meetingdata.topic,meetingdata.start_time,meetingdata.duration,meetingdata.timezone)
       localStorage.removeItem('data')
     }
     }
@@ -174,10 +167,10 @@ const propTypes = {
                         <Label>Duration</Label> &nbsp; &nbsp; &nbsp;
                         <Input
                                 type="number"
-                                name="time"
-                                id="time"
+                                name="duration"
+                                id="duration"
                                 placeholder='duration'
-                                value={defaultIfEmpty(meetingdata.time)}
+                                value={defaultIfEmpty(meetingdata.duration)}
                                 onChange={changeHandler}
                                 required
                         >&nbsp; &nbsp;

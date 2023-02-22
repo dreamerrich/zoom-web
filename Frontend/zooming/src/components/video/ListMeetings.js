@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
-import { Button, Table } from 'reactstrap';
+import { Button, Table, Input } from 'reactstrap';
 import { useHistory } from "react-router-dom";
-import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; 
 import 'react-date-range/dist/theme/default.css';
 
@@ -122,10 +121,9 @@ const propTypes = {
         history.push(`/UpdateMeeting/${e}`)
     }
 
-    const [startDate,setStartDate]= useState(new Date());
-    const [endDate,setEndDate]= useState(new Date());
-    const [allmeeting, setAllMeeting] = useState([]);
-    const [alldata, setAllData] = useState([])
+    const [startDate,setStartDate]= useState("");
+    const [endDate,setEndDate]= useState("");
+    
 
     const selectionRange = {
         startDate: startDate,
@@ -135,8 +133,8 @@ const propTypes = {
 
     const handleSelect = (date) =>{
         let filterdata = allmeeting.filter()
-        setStartDate(date.selection.startDate);
-        setEndDate(date.selection.endDate); 
+        setStartDate(start_date);
+        setEndDate(end_date); 
       };
    
     return (
@@ -151,7 +149,24 @@ const propTypes = {
                             <h3>Meetings</h3>
                         </div>
                             <hr />
-                           
+                           <div>
+                                From:
+                                <Input
+                                    type="date"
+                                    name="startdate"
+                                    id="startdate"
+                                    placeholder='date'
+                                    value={""}
+                                />&nbsp;
+                                To:
+                                <Input
+                                    type="date"
+                                    name="enddate"
+                                    id="enddate"
+                                    placeholder='date'
+                                    value={""}
+                                />&nbsp;
+                           </div>
                             {Token ?
                             <Table>
                                 <thead>

@@ -103,7 +103,7 @@ class ZoomMeetings(APIView):
     permission_classes = [IsAuthenticated, ]
     def __init__(self,email='richidhimar45@gmail.com',api_key=settings.API_KEY,secret_key=settings.SECRET_KEY):
         self.time_now = datetime.datetime.now()
-        self.expiration_time = self.time_now+datetime.timedelta(minutes=40)
+        self.expiration_time = self.time_now+datetime.timedelta(minutes=60)
         self.expiration_in_seconds = round(self.expiration_time.timestamp())
         
         self.headers = {"alg": "HS256","typ": "JWT"}
@@ -160,21 +160,25 @@ class ZoomMeetings(APIView):
         print("🚀 ~ file: views.py:161 ~ serializer", serializer.data)
         return Response(serializer.data)
     
+    # def get(self, request, id, fromat=None):
+    #     meeting_id = CreateMeeting.objects.get(id=id)
+    #     url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
+    #     header = {'authorization': 'Bearer '+self.request_token}
+    #     meeting = requests.get(url, headers=header)
+    #     meet_detail = meeting.text
+    #     detail = json.loads(meet_detail)
+    #     serializer = MeetingSerializer(meeting_id)
+    #     return Response(serializer.data)
+
     def patch(self, request, id, format=None):
-        data_get = self.get_object(id)
-        print("🚀 ~ file: views.py:150 ~ data", data_get)
+        meeting_id = self.get_object(id)
         date = datetime.datetime.now()
-        url = 'https://api.zoom.us/v2/meetings/'+str(data_get)
-        print("🚀 ~ file: views.py:168 ~ url", url)
+        url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
         header = {'authorization': 'Bearer '+self.request_token}
-        jsonObj = {"start_time":date.strftime('yyyy-MM-ddTHH:mm:ssZ')}
-        meeting = requests.patch(url,json=jsonObj, headers=header)
-        print("🚀 ~ file: views.py:144 ~ meeting", meeting)
-        meet_detail = meeting.text
-        print("🚀 ~ file: views.py:174 ~ meet_detail", meet_detail)
-        # detail = json.loads(meet_detail)
-        # print("🚀 ~ file: views.py:176 ~ detail", detail)
-        serializer_class = MeetingSerializer(data_get,data=request.data,context={'request':request})
+        jsonObj = {"start_time": date.strftime('yyyy-MM-ddTHH:mm:ssZ')}
+        meeting = requests.patch(url,json=request.data, headers=header)
+        # print("======-=----------> :", request.data ,jsonObj, header, "----------\n", meeting.status_code)
+        serializer_class = MeetingSerializer(meeting_id,data=request.data,context={'request':request})
         if serializer_class.is_valid(raise_exception=True):
             serializer_class.save()
             print(">>>>>>>>>>>>",serializer_class.data)
@@ -204,6 +208,7 @@ class MeetingList(APIView):
         serializer = MeetingSerializer(the_filtered_qs, many=True)
         return Response(serializer.data)
 
+'''-------------meeting detail---------------'''
 
 class MeetingLink(APIView):
     def get(self, request):

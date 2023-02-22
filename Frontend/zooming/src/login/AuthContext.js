@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -26,12 +26,12 @@ export const AuthProvider = ({ children }) => {
     const response = await fetch("http://127.0.0.1:8000/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         username,
-        password
-      })
+        password,
+      }),
     });
     const data = await response.json();
     if (response.status === 200) {
@@ -43,12 +43,19 @@ export const AuthProvider = ({ children }) => {
       alert("Something went wrong!");
     }
   };
-  
-  const registerUser = async (username, email, first_name, last_name, password, password2) => {
+
+  const registerUser = async (
+    username,
+    email,
+    first_name,
+    last_name,
+    password,
+    password2
+  ) => {
     const response = await fetch("http://127.0.0.1:8000/register", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         username,
@@ -56,8 +63,8 @@ export const AuthProvider = ({ children }) => {
         first_name,
         last_name,
         password,
-        password2
-      })
+        password2,
+      }),
     });
     if (response.status === 200) {
       history.push("/Sigin");
@@ -65,7 +72,7 @@ export const AuthProvider = ({ children }) => {
       alert("Something went wrong!");
     }
   };
- 
+
   const logoutUser = () => {
     setAuthTokens(null);
     setUser(null);
@@ -74,47 +81,53 @@ export const AuthProvider = ({ children }) => {
   };
 
   const CreateMeeting = async (topic, start_time, duration, timezone) => {
-    const token = localStorage.getItem("authTokens")
-    const authtoken = JSON.parse(token)
+    const token = localStorage.getItem("authTokens");
+    const authtoken = JSON.parse(token);
     const response = await fetch("http://127.0.0.1:8000/createmeet", {
       method: "POST",
       headers: {
-        'Authorization': 'Bearer ' + authtoken.access,
-        "Content-Type": "application/json"
+        Authorization: "Bearer " + authtoken.access,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        topic, 
-        start_time,  
+        topic,
+        start_time,
         timezone,
-        duration, 
-      })
+        duration,
+      }),
     });
     if (response.status === 200) {
       history.push("/MeetingDetail");
     } else {
       alert("Something went wrong!");
     }
-  }
+  };
 
-  const UpdateMeeting = async () => {
-    const token = localStorage.getItem("authTokens")
-    const authtoken = JSON.parse(token)
-    const id = localStorage.getItem("data")
-
-    const response =  await axios(`http://127.0.0.1:8000/updatemeet/${id}`, {
+  const UpdateMeeting = async (topic, start_time, duration, timezone) => {
+    const token = localStorage.getItem("authTokens");
+    const authtoken = JSON.parse(token);
+    const id = localStorage.getItem("data");
+    const response = await fetch(`http://127.0.0.1:8000/updatemeet/${id}`, {
       method: "PATCH",
       headers: {
-        'Authorization': 'Bearer ' + authtoken.access, 
-        'Content-Type': 'application/x-www-form-urlencoded'}
+        Authorization: "Bearer " + authtoken.access,
+        // "Access-Control-Allow-Headers":"*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        topic,
+        start_time,
+        timezone,
+        duration,
+      }),
     });
     if (response.status === 200) {
-      // history.push(`/MeetingDetail`)
+      history.push(`/ListMeeting`)
       return response.data;
     } else {
       alert("Something went wrong!");
     }
-  }
- 
+  };
 
   const contextData = {
     user,
@@ -125,7 +138,7 @@ export const AuthProvider = ({ children }) => {
     loginUser,
     logoutUser,
     CreateMeeting,
-    UpdateMeeting
+    UpdateMeeting,
   };
 
   useEffect(() => {
@@ -135,10 +148,6 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, [authTokens, loading]);
   return (
-    <AuthContext.Provider value={contextData}>
-      {children} 
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
   );
 };
-
-
