@@ -14,7 +14,6 @@ from django.contrib.auth import authenticate
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework import filters
-from django_zoom_meetings import ZoomMeetings
 from django.core.mail import send_mail
 from zoomclone import settings
 from django.http import Http404
@@ -134,7 +133,6 @@ class ZoomMeetings(APIView):
                     user = self.request.user 
                 )
                 return Response(serializer_class.data)
-                # print("",serializer_class)
                 #  m_url = detail['join_url']
                 #  m_id = detail['id']
                 #  m_passcode = detail['password']
@@ -155,9 +153,7 @@ class ZoomMeetings(APIView):
 
     def get(self, request, id, format=None):
         data = self.get_object(id)
-        print("🚀 ~ file: views.py ~ line 55 ~ project_data", data)
         serializer = MeetingSerializer(data)
-        print("🚀 ~ file: views.py:161 ~ serializer", serializer.data)
         return Response(serializer.data)
     
     # def get(self, request, id, fromat=None):
@@ -177,11 +173,9 @@ class ZoomMeetings(APIView):
         header = {'authorization': 'Bearer '+self.request_token}
         jsonObj = {"start_time": date.strftime('yyyy-MM-ddTHH:mm:ssZ')}
         meeting = requests.patch(url,json=request.data, headers=header)
-        # print("======-=----------> :", request.data ,jsonObj, header, "----------\n", meeting.status_code)
         serializer_class = MeetingSerializer(meeting_id,data=request.data,context={'request':request})
         if serializer_class.is_valid(raise_exception=True):
             serializer_class.save()
-            print(">>>>>>>>>>>>",serializer_class.data)
             return Response(serializer_class.data)
         else :
             return Response("No data", serializer_class.error)
@@ -190,7 +184,7 @@ class ZoomMeetings(APIView):
 class MeetingList(APIView):
     permission_classes = [IsAuthenticated, ]
     filter_backends = (filters.SearchFilter,)
-    search_fields = ["start_time"]
+    search_fields = ["topic"]
 
     def filter_queryset(self, queryset):
 
@@ -200,8 +194,7 @@ class MeetingList(APIView):
 
     def get_queryset(self):
         user = self.request.user
-        return CreateMeeting.objects.filter(user=user).order_by("start_time")
-        # return Project.objects.filter(created_by=user).order_by("-created_at")
+        return CreateMeeting.objects.filter(user=user)
 
     def get(self, request, format=None):
         the_filtered_qs = self.filter_queryset(self.get_queryset())
@@ -213,7 +206,6 @@ class MeetingList(APIView):
 class MeetingLink(APIView):
     def get(self, request):
         user = request.user
-        print("🚀 ~ file: views.py:206 ~ user", user)
         queryset = CreateMeeting.objects.filter(user=user).latest('start_time')
         serializer_class = MeetingSerializer(queryset, context={'request':request})
         return Response(serializer_class.data)

@@ -2,11 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Header from '../layout/Header';
-import Footer from '../layout/Footer';
-import { Button, Table, Input } from 'reactstrap';
+import { Button, Table } from 'reactstrap';
 import { useHistory } from "react-router-dom";
-import 'react-date-range/dist/styles.css'; 
-import 'react-date-range/dist/theme/default.css';
 
 const propTypes = {
     navPosition: PropTypes.string,
@@ -87,13 +84,6 @@ const propTypes = {
     const [meeting, setMeeting] = useState([])
     const token = localStorage.getItem("authTokens");
     const Token = JSON.parse(token);
-
-    // const meeting_list = [meeting]
-    // const data_meeting = meeting_list.filter(time => {return meeting.start_time})           
-
-    // var dateobj = meeting.start_time.toISOString()
-    // var date = dateobj.toDateTimeString();
-    // console.log("?????????",dateobj)
     
     const fetchData = () => {
         fetch('http://127.0.0.1:8000/meeting',{ 
@@ -106,7 +96,6 @@ const propTypes = {
         })
         .then(data => {
                 setMeeting(data)
-                console.log(data)
             })
         }
 
@@ -117,26 +106,10 @@ const propTypes = {
     let data =("")
     const dataid = (e) => {
         data = localStorage.setItem("data", JSON.stringify(e))
-        console.log('e----------------',e);
         history.push(`/UpdateMeeting/${e}`)
     }
-
-    const [startDate,setStartDate]= useState("");
-    const [endDate,setEndDate]= useState("");
     
-
-    const selectionRange = {
-        startDate: startDate,
-        endDate: endDate,
-        key: 'selection',
-      }
-
-    const handleSelect = (date) =>{
-        let filterdata = allmeeting.filter()
-        setStartDate(start_date);
-        setEndDate(end_date); 
-      };
-   
+      
     return (
         <section
             {...props}
@@ -149,24 +122,6 @@ const propTypes = {
                             <h3>Meetings</h3>
                         </div>
                             <hr />
-                           <div>
-                                From:
-                                <Input
-                                    type="date"
-                                    name="startdate"
-                                    id="startdate"
-                                    placeholder='date'
-                                    value={""}
-                                />&nbsp;
-                                To:
-                                <Input
-                                    type="date"
-                                    name="enddate"
-                                    id="enddate"
-                                    placeholder='date'
-                                    value={""}
-                                />&nbsp;
-                           </div>
                             {Token ?
                             <Table>
                                 <thead>
@@ -175,31 +130,34 @@ const propTypes = {
                                     </tr>
                                     <tr>
                                         <th><h4>Start time</h4></th>
-                                        <th><h4>Topic</h4></th>
-                                        
+                                        <th><h4>Topic</h4></th>  
                                     </tr>
                                 </thead>
                                 <tbody>
                                 {meeting.map((i)=> {return (
                                     <tr>
-                                        <td><h6>{i.start_time}</h6></td>
-                                        <td><h6>{i.topic}</h6><br/>{i.meeting_id}</td>
-                                        <td><Button onClick={()=>dataid(i.id)}>Edit</Button></td>
+                                        <td key={i.start_time}><h6>{i.start_time}</h6></td>
+                                        <td key={i.meeting_id}><h6 key={i.topic}>{i.topic}</h6><br/>{i.meeting_id}</td>
+                                        <td key={i.id}><Button onClick={()=>dataid(i.id)}>Edit</Button></td>
                                     </tr>
                                     )})}
                                     <tr>
                                     </tr>
                                 </tbody>
-                            </Table> :
+                            </Table> 
+                            :
                             <div>
-                            <h6>Please Login to view Your past meeting.</h6>
+                                <h6>Please Login to view Your past meeting.</h6>
+                            </div>
+                            }
+                            
+                        <div>
+                            
                         </div>
-                    }
-                    <div></div>
-                    <div></div>
+                        <div></div>
                     </div>
                 </div> 
-            <Footer/>
+          
         </section>
     )
     

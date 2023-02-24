@@ -5,9 +5,7 @@ import classNames from 'classnames';
 import { SectionTilesProps } from '../../utils/SectionProps';
 import Button from '../elements/Button';
 import Header from '../layout/Header';
-import Footer from '../layout/Footer';
 import zones from '../../data/timezones';
-import { useHistory } from "react-router-dom"
 
 const propTypes = {
   ...SectionTilesProps.types
@@ -62,22 +60,12 @@ const CreateMeeting = ({
     } 
 
     const { UpdateMeeting, CreateMeeting } = useContext(AuthContext);
-    // const { CreateMeeting } = useContext(AuthContext);
 
     const token = localStorage.getItem("authTokens");
     const accessToken = JSON.parse(token);
     const auth = accessToken.access
 
     const id = localStorage.getItem("data")
-
-    const Create = async e => {
-        e.preventDefault();
-        console.log("in create")
-        CreateMeeting(data.topic, data.start_time, data.duration, data.timezone);
-        console.log(">>>>>> create",CreateMeeting);
-    }
-
-    const history = useHistory()
 
     const [ meetingdata, setMeetingData ] = useState([])
 
@@ -92,7 +80,6 @@ const CreateMeeting = ({
         })
         .then(data => {
                 setMeetingData(data)
-                console.log(">>>>>>>>>",data)
             })
     }
 
@@ -102,10 +89,8 @@ const CreateMeeting = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(">>>>>>>>>>>>>>",id);
     if(!id){
-      console.log("create");
-      Create()
+      CreateMeeting(data.topic, data.start_time, data.duration, data.timezone);
     } else {
       UpdateMeeting(meetingdata.topic,meetingdata.start_time,meetingdata.duration,meetingdata.timezone)
       localStorage.removeItem('data')
@@ -211,7 +196,6 @@ const CreateMeeting = ({
           }
         </div> 
         </div>
-      <Footer/>
       </div>
     </section>
   )

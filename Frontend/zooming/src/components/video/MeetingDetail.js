@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { SectionTilesProps } from '../../utils/SectionProps';
 import Button from '../elements/Button';
 import Header from '../layout/Header';
-import Footer from '../layout/Footer';
+
 
 const propTypes = {
     ...SectionTilesProps.types
@@ -55,7 +55,6 @@ const propTypes = {
         })
         .then(data => {
                 setMeetingLink(data)
-                console.log(data)
             })
         }
 
@@ -100,7 +99,7 @@ const propTypes = {
                     </div>
                 </div>
             </div>
-            <Footer/>
+          
         </section>
     )
         

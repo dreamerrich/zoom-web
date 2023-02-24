@@ -66,10 +66,10 @@ export const AuthProvider = ({ children }) => {
         password2,
       }),
     });
-    if (response.status === 200) {
-      history.push("/Sigin");
+    if (response.status === 201) {
+      history.push("/SignIn");
     } else {
-      alert("Something went wrong!");
+      alert("Data already exist");
     }
   };
 

@@ -120,24 +120,21 @@ const Header = ({
                       'list-reset text-xs',
                       navPosition && `header-nav-${navPosition}`
                     )}>
-                    <li>
-                      <Link to="/Product" onClick={openMenu}>Products</Link>
-                    </li>
-                    <li>
+                      <li>
                       <Link to="/ListMeeting" onClick={openMenu}>Meetings</Link>
-                    </li>
-                    <li>
-                      <Link to="/Plans" onClick={openMenu}>Plans & Pricing</Link>
-                    </li>
-                    <li>
-                    <Link to="/CreateMeeting" onClick={openMenu}>Create Meeting</Link>
-                    </li>
-                    <li>
-                    <a href="https://zoom.us/join">Join</a>
-                    </li>
-                    <li>
-                      
-                    </li>
+                      </li>
+                      <li>
+                        <Link to="/CreateMeeting" onClick={openMenu}>Create Meeting</Link>
+                      </li>
+                      <li>
+                        <a href="https://zoom.us/join">Join</a>
+                      </li>
+                      <li>
+                        <Link to="/Product" onClick={openMenu}>Products</Link>
+                      </li>
+                      <li>
+                        <Link to="/Plans" onClick={openMenu}>Plans & Pricing</Link>
+                      </li>
                   </ul>
                  
                   {!hideSignin &&

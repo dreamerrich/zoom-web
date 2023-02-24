@@ -126,7 +126,7 @@ const propTypes = {
                         </div>
                         <div className='meetingDetail'>
                             <p>Password</p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <p>.....</p>
+                            <p>.........</p>
                         </div>
                     </div>
                 </div>  
