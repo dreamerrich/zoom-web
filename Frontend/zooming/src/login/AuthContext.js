@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -111,7 +110,6 @@ export const AuthProvider = ({ children }) => {
       method: "PATCH",
       headers: {
         Authorization: "Bearer " + authtoken.access,
-        // "Access-Control-Allow-Headers":"*",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -129,6 +127,31 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const DeleteMeeting = async (topic, start_time, duration, timezone) => {
+    const token = localStorage.getItem("authTokens");
+    const authtoken = JSON.parse(token);
+    const id = localStorage.getItem("delete_id");
+    const response = await fetch(`http://127.0.0.1:8000/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + authtoken.access,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        topic,
+        start_time,
+        timezone,
+        duration,
+      }),
+    });
+    if (response.status === 204) {
+      history.push(`/ListMeeting`)
+      return response.data;
+    } else {
+      alert("Something went wrong!");
+    }
+  };
+
   const contextData = {
     user,
     setUser,
@@ -139,6 +162,7 @@ export const AuthProvider = ({ children }) => {
     logoutUser,
     CreateMeeting,
     UpdateMeeting,
+    DeleteMeeting,
   };
 
   useEffect(() => {

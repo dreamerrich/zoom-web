@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from  .serializers import *
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from django.contrib.auth.models import update_last_login
 from rest_framework_jwt.settings import api_settings
 from rest_framework.authtoken.models import Token
@@ -21,6 +22,7 @@ import datetime
 import jwt
 import requests
 import json
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
 
@@ -178,13 +180,22 @@ class ZoomMeetings(APIView):
             serializer_class.save()
             return Response(serializer_class.data)
         else :
-            return Response("No data", serializer_class.error)
+            return Response("No data", serializer_class)
+        
+    def delete(self, request, id=None, format=None):
+        meeting_id=CreateMeeting.objects.get(id=id)
+        url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
+        header = {'authorization': 'Bearer '+self.request_token}
+        meeting = requests.delete(url,json=request.data, headers=header)
+        meeting_id.delete()
+        return Response("data deleted")
 
 '''-------------filtering---------------'''  
 class MeetingList(APIView):
     permission_classes = [IsAuthenticated, ]
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
     search_fields = ["topic"]
+    filterset_field = ['start_time']
 
     def filter_queryset(self, queryset):
 

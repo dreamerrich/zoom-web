@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Header from '../layout/Header';
-import { Button, Table } from 'reactstrap';
+import { Button, Table, Input } from 'reactstrap';
 import { useHistory } from "react-router-dom";
+import AuthContext from '../../login/AuthContext';
 
 const propTypes = {
     navPosition: PropTypes.string,
@@ -80,7 +81,8 @@ const propTypes = {
       topDivider && 'has-top-divider',
       bottomDivider && 'has-bottom-divider'
     );
-
+    
+    const { DeleteMeeting } = useContext(AuthContext);
     const [meeting, setMeeting] = useState([])
     const token = localStorage.getItem("authTokens");
     const Token = JSON.parse(token);
@@ -108,7 +110,18 @@ const propTypes = {
         data = localStorage.setItem("data", JSON.stringify(e))
         history.push(`/UpdateMeeting/${e}`)
     }
+
+    let delete_id =("")
+    const d_id = (e) => {
+        delete_id = localStorage.setItem("delete_id", JSON.stringify(e))
+        DeleteMeeting()
+    }
+    localStorage.removeItem(d_id)
     
+    const [filter, setFilter] = useState("")
+
+    let filterdata = meeting.filter(title => title=filter)
+    console.log(filterdata, filter);
       
     return (
         <section
@@ -122,11 +135,19 @@ const propTypes = {
                             <h3>Meetings</h3>
                         </div>
                             <hr />
+                            <Input
+                                type="text"
+                                name="topic"
+                                id="topic"
+                                placeholder='topic'
+                                value={e => setFilter(e.target.value)}
+                                required
+                            />&nbsp; 
                             {Token ?
                             <Table>
                                 <thead>
                                     <tr>
-                                        
+                                       
                                     </tr>
                                     <tr>
                                         <th><h4>Start time</h4></th>
@@ -136,9 +157,10 @@ const propTypes = {
                                 <tbody>
                                 {meeting.map((i)=> {return (
                                     <tr>
-                                        <td key={i.start_time}><h6>{i.start_time}</h6></td>
-                                        <td key={i.meeting_id}><h6 key={i.topic}>{i.topic}</h6><br/>{i.meeting_id}</td>
-                                        <td key={i.id}><Button onClick={()=>dataid(i.id)}>Edit</Button></td>
+                                        <td><h6>{i.start_time}</h6></td>
+                                        <td><h6 key={i.topic}>{i.topic}</h6><br/>{i.meeting_id}</td>
+                                        <td><Button onClick={()=>dataid(i.id)}>Edit</Button></td>
+                                        <td><Button className='btn btn-danger' onClick={()=>d_id(i.id)}>Delete</Button></td>
                                     </tr>
                                     )})}
                                     <tr>
