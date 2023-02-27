@@ -127,24 +127,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const DeleteMeeting = async (topic, start_time, duration, timezone) => {
+  const DeleteMeeting = async () => {
     const token = localStorage.getItem("authTokens");
     const authtoken = JSON.parse(token);
     const id = localStorage.getItem("delete_id");
-    const response = await fetch(`http://127.0.0.1:8000/delete/${id}`, {
+    const response = await fetch(`http://127.0.0.1:8000/updatemeet/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + authtoken.access,
         "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        topic,
-        start_time,
-        timezone,
-        duration,
-      }),
+      }
     });
-    if (response.status === 204) {
+    if (response.status === 200) {
       history.push(`/ListMeeting`)
       return response.data;
     } else {

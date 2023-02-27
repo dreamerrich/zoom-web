@@ -175,20 +175,21 @@ class ZoomMeetings(APIView):
         header = {'authorization': 'Bearer '+self.request_token}
         jsonObj = {"start_time": date.strftime('yyyy-MM-ddTHH:mm:ssZ')}
         meeting = requests.patch(url,json=request.data, headers=header)
+        print("🚀 ~ file: views.py:178 ~ meeting:", meeting)
         serializer_class = MeetingSerializer(meeting_id,data=request.data,context={'request':request})
         if serializer_class.is_valid(raise_exception=True):
             serializer_class.save()
             return Response(serializer_class.data)
         else :
-            return Response("No data", serializer_class)
+            return Response("No data", serializer_class.error)
         
-    def delete(self, request, id=None, format=None):
-        meeting_id=CreateMeeting.objects.get(id=id)
+    def delete(self, request, id, fromat=None):
+        meeting_id = CreateMeeting.objects.get(id=id)
         url = 'https://api.zoom.us/v2/meetings/'+str(meeting_id)
         header = {'authorization': 'Bearer '+self.request_token}
-        meeting = requests.delete(url,json=request.data, headers=header)
+        meeting = requests.delete(url, headers=header)
         meeting_id.delete()
-        return Response("data deleted")
+        return Response("meeting deleted")
 
 '''-------------filtering---------------'''  
 class MeetingList(APIView):
@@ -211,6 +212,7 @@ class MeetingList(APIView):
         the_filtered_qs = self.filter_queryset(self.get_queryset())
         serializer = MeetingSerializer(the_filtered_qs, many=True)
         return Response(serializer.data)
+
 
 '''-------------meeting detail---------------'''
 

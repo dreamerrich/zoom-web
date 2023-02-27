@@ -68,4 +68,4 @@ class CreateMeeting(models.Model):
     passcode = models.CharField(max_length=255, null=True, editable=False)
 
     def __str__(self):
-        return self.meeting_id
+        return str(self.meeting_id) 

@@ -110,10 +110,10 @@ const CreateMeeting = ({
       <Header />
         <div className="container">
         <div className={innerClasses}>
-          <div>
-            <h3>Schedule Meetings</h3>
-          </div>
-          { token ?
+        <div>
+        <h3>Schedule Meetings</h3>
+        </div>
+        { token ?
             <div className='meetingForm'>
               <Form style={{textAlign:"left"}} onSubmit={handleSubmit}>
                 <FormGroup>
@@ -187,11 +187,9 @@ const CreateMeeting = ({
                 </FormGroup>
               </Form>
             </div>
-            :
+          :
             <div>
-              <div>
-                <h4>Please Login first</h4>
-              </div>
+              <h4>Please Login first</h4>
             </div>
           }
         </div> 

@@ -83,6 +83,8 @@ const propTypes = {
     );
     
     const { DeleteMeeting } = useContext(AuthContext);
+
+    const [search, setSearch] = useState('')
     const [meeting, setMeeting] = useState([])
     const token = localStorage.getItem("authTokens");
     const Token = JSON.parse(token);
@@ -117,11 +119,6 @@ const propTypes = {
         DeleteMeeting()
     }
     localStorage.removeItem(d_id)
-    
-    const [filter, setFilter] = useState("")
-
-    let filterdata = meeting.filter(title => title=filter)
-    console.log(filterdata, filter);
       
     return (
         <section
@@ -139,30 +136,41 @@ const propTypes = {
                                 type="text"
                                 name="topic"
                                 id="topic"
-                                placeholder='topic'
-                                value={e => setFilter(e.target.value)}
+                                placeholder='Quick search with topic'
+                                onChange={e => setSearch(e.target.value)}
                                 required
                             />&nbsp; 
                             {Token ?
                             <Table>
                                 <thead>
                                     <tr>
-                                       
-                                    </tr>
-                                    <tr>
                                         <th><h4>Start time</h4></th>
                                         <th><h4>Topic</h4></th>  
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {meeting.map((i)=> {return (
-                                    <tr>
-                                        <td><h6>{i.start_time}</h6></td>
-                                        <td><h6 key={i.topic}>{i.topic}</h6><br/>{i.meeting_id}</td>
-                                        <td><Button onClick={()=>dataid(i.id)}>Edit</Button></td>
-                                        <td><Button className='btn btn-danger' onClick={()=>d_id(i.id)}>Delete</Button></td>
-                                    </tr>
-                                    )})}
+                                { search ? 
+                                    (meeting.filter(d=>d.start_time.includes(search.toLowerCase())).map((i)=> { 
+                                        return (
+                                            <tr>
+                                                <td><h6>{i.start_time}</h6></td>
+                                                <td><h6 key={i.topic}>{i.topic}</h6><br/>{i.meeting_id}</td>
+                                                <td><Button onClick={()=>dataid(i.id)}>Edit</Button></td>
+                                                <td><Button className='btn btn-danger' onClick={()=>d_id(i.id)}>Delete</Button></td>
+                                            </tr>
+                                        )}))
+                                        :
+                                        (meeting.map((i)=> {
+                                            return (
+                                                <tr>
+                                                    <td><h6>{i.start_time}</h6></td>
+                                                    <td><h6 key={i.topic}>{i.topic}</h6><br/>{i.meeting_id}</td>
+                                                    <td><Button onClick={()=>dataid(i.id)}>Edit</Button></td>
+                                                    <td><Button className='btn btn-danger' onClick={()=>d_id(i.id)}>Delete</Button></td>
+                                                </tr>
+                                            )
+                                        }))
+                                }
                                     <tr>
                                     </tr>
                                 </tbody>
@@ -172,11 +180,6 @@ const propTypes = {
                                 <h6>Please Login to view Your past meeting.</h6>
                             </div>
                             }
-                            
-                        <div>
-                            
-                        </div>
-                        <div></div>
                     </div>
                 </div> 
           
