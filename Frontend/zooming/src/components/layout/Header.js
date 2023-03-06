@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import Logo from './partials/Logo';
-import SignInModal from '../pages/SignIn';
+import SignInModal from '../pages/SignInModal';
 import AuthContext from '../../login/AuthContext';
 
 const propTypes = {

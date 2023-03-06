@@ -41,7 +41,6 @@ class RegisterApiView(APIView):
             return Response(serializer_class.data, status=status.HTTP_201_CREATED)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 # ------------- User get api -----------------
 class Profile(APIView):
     def get(self, request):
@@ -175,7 +174,6 @@ class ZoomMeetings(APIView):
         header = {'authorization': 'Bearer '+self.request_token}
         jsonObj = {"start_time": date.strftime('yyyy-MM-ddTHH:mm:ssZ')}
         meeting = requests.patch(url,json=request.data, headers=header)
-        print("🚀 ~ file: views.py:178 ~ meeting:", meeting)
         serializer_class = MeetingSerializer(meeting_id,data=request.data,context={'request':request})
         if serializer_class.is_valid(raise_exception=True):
             serializer_class.save()

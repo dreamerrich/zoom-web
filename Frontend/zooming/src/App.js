@@ -12,6 +12,7 @@ import Home from './views/Home';
 import Plans from './components/sections/Plans&pricing';
 import Product from './components/sections/Product';
 import CreateMeeting from './components/video/CreateMeetings';
+import UpdateMeeting from './components/video/UpdateMeeting';
 import MeetingDetail from './components/video/MeetingDetail';
 import ListMeeting from './components/video/ListMeetings';
 import DashBoard from './login/DashBoard';
@@ -54,7 +55,7 @@ const App = () => {
           <Route exact path="/MeetingDetail" component={MeetingDetail} />
           <Route exact path="/ListMeeting" component={ListMeeting} />
           <Route exact path="/Dashboard" component={DashBoard} />
-          <Route exact path="/UpdateMeeting/:id" component={CreateMeeting} />
+          <Route exact path="/UpdateMeeting/:id" component={UpdateMeeting} />
         </Switch>
         </AuthProvider>
         </div>

@@ -117,6 +117,7 @@ const propTypes = {
     const d_id = (e) => {
         delete_id = localStorage.setItem("delete_id", JSON.stringify(e))
         DeleteMeeting()
+        history.push(`/ListMeeting`)
     }
     localStorage.removeItem(d_id)
       
@@ -150,9 +151,9 @@ const propTypes = {
                                 </thead>
                                 <tbody>
                                 { search ? 
-                                    (meeting.filter(d=>d.start_time.includes(search.toLowerCase())).map((i)=> { 
+                                    (meeting.filter(d=>d.topic.includes(search.toLowerCase())).map((i)=> { 
                                         return (
-                                            <tr>
+                                            <tr key={i.id}>
                                                 <td><h6>{i.start_time}</h6></td>
                                                 <td><h6 key={i.topic}>{i.topic}</h6><br/>{i.meeting_id}</td>
                                                 <td><Button onClick={()=>dataid(i.id)}>Edit</Button></td>

@@ -92,9 +92,10 @@ const SignIn = ({
     return(
         <section
         {...props}
-        className={outerClasses}>
+        className={outerClasses}
+        >
         <div>
-            <Header/>
+            
         </div>
         <div className={innerClasses}>
             <div className='container'>
@@ -131,5 +132,8 @@ const SignIn = ({
     )
 
    }
+
+SignIn.propTypes = propTypes;
+SignIn.defaultProps = defaultProps;
     
 export default SignIn;
